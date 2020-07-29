@@ -1,7 +1,7 @@
 ---
 
 - name: Set up VM
-  hosts: "{{ vm_name }}"
+  hosts: all
   serial: 1
 
   tasks:
