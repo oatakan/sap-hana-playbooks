@@ -1,0 +1,20 @@
+---
+
+- name: Set up VM
+  hosts: "{{ vm_name }}"
+  serial: 1
+
+  tasks:
+  - name: Set Hostname on "{{ vm_name }}"
+    hostname:
+      name: "{{ vm_name }}"
+
+  - name: Subscribe to our Satellite using our activation key
+    redhat_subscription:
+      state: present
+      activationkey: SAP HANA Server
+      org_id: Shadow_Man
+    failed_when: false
+
+  - name: Reboot the machine
+    reboot:
