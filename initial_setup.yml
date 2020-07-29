@@ -1,13 +1,13 @@
 ---
 
 - name: Set up VM
-  hosts: all
+  hosts: lab1*
 #  serial: 1
 
   tasks:
-  - name: Set Hostname on "{{ vm_name }}"
+  - name: Set Hostname on "{{ name }}"
     hostname:
-      name: "{{ vm_name }}"
+      name: "{{ name }}"
 
   - name: Subscribe to our Satellite using our activation key
     redhat_subscription:
