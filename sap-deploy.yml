@@ -1,14 +1,14 @@
 ---
 
-- hosts: all
+- hosts: lab1*
   roles:
     - { role: redhat_sap.sap_rhsm }
     - { role: redhat_sap.sap_hostagent }
 
-- hosts: *02
+- hosts: lab1*02
   roles:
     - { role: redhat_sap.sap_hana_deployment }
 
-- hosts: *01
+- hosts: lab1*01
   roles:
     - { role: redhat_sap.sap_s4hana_deployment }
