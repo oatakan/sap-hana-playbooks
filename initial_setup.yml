@@ -2,7 +2,7 @@
 
 - name: Set up VM
   hosts: all
-  serial: 1
+#  serial: 1
 
   tasks:
   - name: Set Hostname on "{{ vm_name }}"
