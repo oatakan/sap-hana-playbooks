@@ -1,4 +1,9 @@
-- name: redhat_sap.sap_rhsm
-- name: redhat_sap.sap_hostagent
-- name: redhat_sap.sap_hana_deployment
-- name: redhat_sap.sap_s4hana_deployment
+collections:
+  - name: theforeman.foreman
+    source: https://galaxy.ansible.com
+
+roles:
+  - name: redhat_sap.sap_rhsm
+  - name: redhat_sap.sap_hostagent
+  - name: redhat_sap.sap_hana_deployment
+  - name: redhat_sap.sap_s4hana_deployment

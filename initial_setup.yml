@@ -5,7 +5,7 @@
 #  serial: 1
 
   tasks:
-  - name: Set Hostname on "{{ name }}"
+  - name: Set Hostname
     hostname:
       name: "{{ name }}"
 
