@@ -1,8 +1,8 @@
 - name: deploy vms via satellite
   hosts: localhost
   gather_facts: no
-#  collections:
-#    - theforeman.foreman
+  collections:
+    - theforeman.foreman
   vars:
     sat_image_name: HANA_Image
     vm_name: lab1test01
@@ -10,7 +10,7 @@
 
   tasks:
     - name: create host via satellite
-      theforeman.foreman.host:
+      host:
         server_url: "{{ lookup('env', 'FOREMAN_SERVER') }}"
         username: "{{ lookup('env', 'FOREMAN_USER') }}"
         password: "{{ lookup('env', 'FOREMAN_PASSWORD') }}"
