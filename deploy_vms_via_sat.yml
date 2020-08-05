@@ -2,7 +2,7 @@
   hosts: localhost
   gather_facts: no
   collections:
-    - theforeman.foreman
+    -  redhat.satellite
   vars:
     sat_image_name: HANA_Image
     vm_name: lab1test01
