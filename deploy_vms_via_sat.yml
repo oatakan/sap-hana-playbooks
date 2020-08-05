@@ -7,6 +7,7 @@
     sat_image_name: HANA_Image
     vm_name: lab1test01
     sat_host_group: HANA_Image
+    domain_name: example.com
 
   tasks:
     - name: create host via satellite
@@ -14,7 +15,7 @@
         server_url: "{{ lookup('env', 'FOREMAN_SERVER') }}"
         username: "{{ lookup('env', 'FOREMAN_USER') }}"
         password: "{{ lookup('env', 'FOREMAN_PASSWORD') }}"
-        name: "{{ vm_name }}"
+        name: "{{ vm_name }}.{{ domain_name }}"
         hostgroup: my_hostgroup
         build: true
         provision_method: image
