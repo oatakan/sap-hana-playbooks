@@ -1,7 +1,6 @@
 ---
 collections:
-  - name: theforeman.foreman
-    source: https://galaxy.ansible.com
+  - theforeman.foreman
 
 roles:
   - name: redhat_sap.sap_rhsm
