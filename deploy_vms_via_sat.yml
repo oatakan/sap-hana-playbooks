@@ -2,7 +2,7 @@
   hosts: localhost
   gather_facts: no
   collections:
-    -  redhat.satellite
+    -  theforeman.foreman
   vars:
     sat_image_name: HANA_Image
     vm_name: lab1test01
@@ -17,8 +17,8 @@
         password: "{{ lookup('env', 'FOREMAN_PASSWORD') }}"
         name: "{{ vm_name }}.{{ domain_name }}"
         hostgroup: "{{ sat_host_group }}"
-        operatingsystem: RHEL 8.1
-        build: true
-        provision_method: image
-        image: "{{ sat_image_name }}"
+#        operatingsystem: RHEL 8.1
+#        build: true
+#        provision_method: image
+#        image: "{{ sat_image_name }}"
         state: present
