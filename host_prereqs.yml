@@ -7,6 +7,7 @@
     - name: install pip packages
       pip:
         name: "{{ item }}"
+        virtualenv_command: /var/lib/awx/venv/ansible/bin/activate
 #        executable: /var/lib/awx/venv/ansible/bin/pip
         state: latest
       loop: "{{ pip_packages }}"
