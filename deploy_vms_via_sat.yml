@@ -40,6 +40,7 @@
             operatingsystem_id: "{{ operatingsystem_id | default('2') }}"
             managed: true
             provision_method: image
+            image_id: "{{ image_id | default('10') }}"
             hostgroup_id: "{{ hostgroup_id | default('16') }}"
             location_id: "{{ location_id | default('2') }}"
             organization_id: "{{ organization_id | default('1') }}"
