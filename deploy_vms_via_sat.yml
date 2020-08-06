@@ -10,21 +10,21 @@
     domain_name: example.com
 
   tasks:
-    - name: create host via satellite
-      host:
-        server_url: "{{ lookup('env', 'FOREMAN_SERVER') }}"
-        username: "{{ lookup('env', 'FOREMAN_USER') }}"
-        password: "{{ lookup('env', 'FOREMAN_PASSWORD') }}"
-        name: "{{ vm_name }}.{{ domain_name }}"
-        hostgroup: "{{ sat_host_group }}"
-        managed: true
-        build: true
-        location: Chattanooga
-        organization: Shadow Man
-#        operatingsystem: "RHEL 8.1"
-#        provision_method: image
-#        image: "{{ sat_image_name }}"
-        state: present
+#    - name: create host via satellite
+#      host:
+#        server_url: "{{ lookup('env', 'FOREMAN_SERVER') }}"
+#        username: "{{ lookup('env', 'FOREMAN_USER') }}"
+#        password: "{{ lookup('env', 'FOREMAN_PASSWORD') }}"
+#        name: "{{ vm_name }}.{{ domain_name }}"
+#        hostgroup: "{{ sat_host_group }}"
+#        managed: true
+#        build: true
+#        location: Chattanooga
+#        organization: Shadow Man
+##        operatingsystem: "RHEL 8.1"
+##        provision_method: image
+##        image: "{{ sat_image_name }}"
+#        state: present
 
     - name: create vm via satellite
       uri:
