@@ -4,7 +4,7 @@
 #  collections:
 #    -  theforeman.foreman
   vars:
-    vm_name: lab1test01
+    vm_prefix: lab1vm
 
   tasks:
 #    - name: create host via satellite
@@ -32,7 +32,7 @@
         body_format: json
         body:
           host:
-            name: "{{ vm_name }}"
+            name: "{{ vm_prefix + '%02d'|format(item|int) }}"
             managed: "true"
             build: "true"
             hostgroup_id: "{{ hostgroup_id | default('16') }}"
@@ -47,3 +47,4 @@
         - deploy_status.status | int != 201
         - deploy_status.json.error.full_messages is defined
         - "'Name has already been taken' not in deploy_status.json.error.full_messages"
+      loop: "{{ range(1, 3 + 1, 1)|list }}"
