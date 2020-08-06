@@ -2,7 +2,6 @@
 
 - name: Set up VM
   hosts: lab1*
-#  serial: 1
 
   tasks:
   - name: Set Hostname
