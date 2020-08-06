@@ -2,6 +2,6 @@
 collections:
   - name: theforeman.foreman
     source: https://galaxy.ansible.com
-
-  - name: redhat.satellite
-    source: https://cloud.redhat.com/api/automation-hub/
+#
+#  - name: redhat.satellite
+#    source: https://cloud.redhat.com/api/automation-hub/
