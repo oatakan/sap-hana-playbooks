@@ -27,7 +27,7 @@
     - name: create vm via satellite
       uri:
         url: "{{ lookup('env', 'FOREMAN_SERVER') }}/hosts"
-        username: "{{ lookup('env', 'FOREMAN_USER') }}"
+        user: "{{ lookup('env', 'FOREMAN_USER') }}"
         password: "{{ lookup('env', 'FOREMAN_PASSWORD') }}"
         validate_certs: false
         force_basic_auth: true
