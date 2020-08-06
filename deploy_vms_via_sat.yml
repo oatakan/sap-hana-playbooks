@@ -2,7 +2,7 @@
   hosts: localhost
   gather_facts: no
   collections:
-    -  redhat.satellite
+    -  theforeman.foreman
   vars:
     sat_image_name: HANA_Image
     vm_name: lab1test01
@@ -10,17 +10,43 @@
     domain_name: example.com
 
   tasks:
-    - name: create host via satellite
-      host:
-        server_url: "{{ lookup('env', 'FOREMAN_SERVER') }}"
+#    - name: create host via satellite
+#      host:
+#        server_url: "{{ lookup('env', 'FOREMAN_SERVER') }}"
+#        username: "{{ lookup('env', 'FOREMAN_USER') }}"
+#        password: "{{ lookup('env', 'FOREMAN_PASSWORD') }}"
+#        name: "{{ vm_name }}.{{ domain_name }}"
+#        hostgroup: "{{ sat_host_group }}"
+#        location: Chattanooga
+#        organization: Shadow Man
+#        operatingsystem: "RHEL 8.1"
+#        provision_method: image
+#        image: "{{ sat_image_name }}"
+#        state: present
+
+    - name: create vm via satellite
+      uri:
+        url: "{{ lookup('env', 'FOREMAN_SERVER') }}/hosts"
         username: "{{ lookup('env', 'FOREMAN_USER') }}"
         password: "{{ lookup('env', 'FOREMAN_PASSWORD') }}"
-        name: "{{ vm_name }}.{{ domain_name }}"
-        hostgroup: "{{ sat_host_group }}"
-        location: Chattanooga
-        organization: Shadow Man
-        operatingsystem: "RHEL 8.1"
-        build: true
-        provision_method: image
-        image: "{{ sat_image_name }}"
-        state: present
+        validate_certs: false
+        force_basic_auth: true
+        timeout: 14400
+        method: POST
+        body_format: json
+        body:
+          host:
+            name: "{{ vm_name }}.{{ domain_name }}"
+            operatingsystem_id: "{{ operatingsystem_id | default('2') }}"
+            managed: true
+            provision_method: image
+            hostgroup_id: "{{ hostgroup_id | default('16') }}"
+            location_id: "{{ location_id | default('2') }}"
+            organization_id: "{{ organization_id | default('1') }}"
+      register: deploy_status
+      changed_when:
+        - deploy_status.status | int == 201
+      failed_when:
+        - deploy_status.status | int != 201
+        - deploy_status.json.error.full_messages is defined
+        - "'Name has already been taken' not in deploy_status.json.error.full_messages"
