@@ -19,8 +19,8 @@
         hostgroup: "{{ sat_host_group }}"
         location: Chattanooga
         organization: Shadow Man
-#        operatingsystem: RHEL 8.1
-#        build: true
-#        provision_method: image
-#        image: "{{ sat_image_name }}"
+        operatingsystem: "RHEL 8.1"
+        build: true
+        provision_method: image
+        image: "{{ sat_image_name }}"
         state: present
