@@ -36,7 +36,7 @@
         body_format: json
         body:
           host:
-            name: "{{ vm_name }}.{{ domain_name }}"
+            name: "{{ vm_name }}"
             operatingsystem_id: "{{ operatingsystem_id | default('2') }}"
             managed: true
             provision_method: image
@@ -44,9 +44,9 @@
             hostgroup_id: "{{ hostgroup_id | default('16') }}"
             location_id: "{{ location_id | default('2') }}"
             organization_id: "{{ organization_id | default('1') }}"
-            interfaces_attributes:
-              name: "{{ vm_name }}"
-              type: interface
+#            interfaces_attributes:
+#              name: "{{ vm_name }}"
+#              type: interface
       register: deploy_status
 #      changed_when:
 #        - deploy_status.status | int == 201
