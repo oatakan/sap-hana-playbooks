@@ -47,6 +47,8 @@
             hostgroup_id: "{{ hostgroup_id | default('16') }}"
             location_id: "{{ location_id | default('2') }}"
             organization_id: "{{ organization_id | default('1') }}"
+            compute_attributes:
+              start: '1'
       register: deploy_status
       changed_when:
         - deploy_status.status | int == 201
@@ -54,24 +56,3 @@
         - deploy_status.status | int != 201
         - deploy_status.json.error.full_messages is defined
         - "'Name has already been taken' not in deploy_status.json.error.full_messages"
-
-    - uri:
-        url: "{{ lookup('env', 'FOREMAN_SERVER') }}/api/v2/hosts"
-        user: "{{ lookup('env', 'FOREMAN_USER') }}"
-        password: "{{ lookup('env', 'FOREMAN_PASSWORD') }}"
-        validate_certs: false
-        force_basic_auth: true
-        timeout: 14400
-        method: POST
-        status_code: 201
-        body_format: json
-        body:
-          host:
-            name: "{{ vm_name }}"
-            build: 'true'
-            managed: 'true'
-            hostgroup_id: "{{ 23 | int }}"
-            location_id: "{{ 2 | int }}"
-            organization_id: "{{ 1 | int }}"
-            compute_attributes:
-              start: '1'
