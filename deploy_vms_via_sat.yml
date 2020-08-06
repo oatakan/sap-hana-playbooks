@@ -1,13 +1,10 @@
 - name: deploy vms via satellite
   hosts: localhost
   gather_facts: no
-  collections:
-    -  theforeman.foreman
+#  collections:
+#    -  theforeman.foreman
   vars:
-    sat_image_name: HANA_Image
     vm_name: lab1test01
-    sat_host_group: HANA_Image
-    domain_name: example.com
 
   tasks:
 #    - name: create host via satellite
@@ -21,9 +18,6 @@
 #        build: true
 #        location: Chattanooga
 #        organization: Shadow Man
-##        operatingsystem: "RHEL 8.1"
-##        provision_method: image
-##        image: "{{ sat_image_name }}"
 #        state: present
 
     - name: create vm via satellite
@@ -39,11 +33,8 @@
         body:
           host:
             name: "{{ vm_name }}"
-#            operatingsystem_id: "{{ operatingsystem_id | default('2') }}"
             managed: "true"
             build: "true"
-#            provision_method: image
-#            image_id: "{{ image_id | default('10') }}"
             hostgroup_id: "{{ hostgroup_id | default('16') }}"
             location_id: "{{ location_id | default('2') }}"
             organization_id: "{{ organization_id | default('1') }}"
