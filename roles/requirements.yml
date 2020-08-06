@@ -1,10 +1,10 @@
 ---
 roles:
   - name: redhat_sap.sap_rhsm
-    source: https://galaxy.ansible.com
+    source: https://galaxy.ansible.com/redhat_sap/sap_rhsm
   - name: redhat_sap.sap_hostagent
-    source: https://galaxy.ansible.com
+    source: https://galaxy.ansible.com/redhat_sap/sap_hostagent
   - name: redhat_sap.sap_hana_deployment
-    source: https://galaxy.ansible.com
+    source: https://galaxy.ansible.com/redhat_sap/sap_hana_deployment
   - name: redhat_sap.sap_s4hana_deployment
-    source: https://galaxy.ansible.com
+    source: https://galaxy.ansible.com/redhat_sap/sap_s4hana_deployment
