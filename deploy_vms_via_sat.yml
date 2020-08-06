@@ -44,6 +44,8 @@
             hostgroup_id: "{{ hostgroup_id | default('16') }}"
             location_id: "{{ location_id | default('2') }}"
             organization_id: "{{ organization_id | default('1') }}"
+            interfaces_attributes:
+              name: {{ vm_name }}
       register: deploy_status
 #      changed_when:
 #        - deploy_status.status | int == 201
