@@ -2,7 +2,7 @@
   hosts: localhost
   gather_facts: no
   collections:
-    -  theforeman.foreman
+    -  redhat.satellite
   vars:
     sat_image_name: HANA_Image
     vm_name: lab1test01
@@ -17,6 +17,8 @@
         password: "{{ lookup('env', 'FOREMAN_PASSWORD') }}"
         name: "{{ vm_name }}.{{ domain_name }}"
         hostgroup: "{{ sat_host_group }}"
+        location: Chattanooga
+        organization: Shadow Man
 #        operatingsystem: RHEL 8.1
 #        build: true
 #        provision_method: image
