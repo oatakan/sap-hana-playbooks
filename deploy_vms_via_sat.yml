@@ -2,7 +2,7 @@
   hosts: localhost
   gather_facts: no
   collections:
-    -  theforeman.foreman
+    -  redhat.satellite
   vars:
     sat_image_name: HANA_Image
     vm_name: lab1test01
@@ -10,13 +10,6 @@
     domain_name: example.com
 
   tasks:
-    - name: get all environment vars
-      command: printenv
-      register: get_env_vars
-
-    - debug:
-        msg: "{{ get_env_vars }}"
-
     - name: create host via satellite
       host:
         server_url: "{{ lookup('env', 'FOREMAN_SERVER') }}"
