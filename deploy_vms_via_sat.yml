@@ -10,6 +10,13 @@
     domain_name: example.com
 
   tasks:
+    - name: get all environment vars
+      command: printenv
+      register: get_env_vars
+
+    - debug:
+        msg: "{{ get_env_vars }}"
+
     - name: create host via satellite
       host:
         server_url: "{{ lookup('env', 'FOREMAN_SERVER') }}"
