@@ -22,3 +22,8 @@
       register: deploy_status
       when: foreman.id | default(sat_host_id) | default(None) is defined
       delegate_to: localhost
+
+
+    # let's wait for a bit for removal to finish, should improve this later
+    - pause:
+        seconds: 120
