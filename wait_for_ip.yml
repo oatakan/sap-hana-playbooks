@@ -19,9 +19,8 @@
             auth: "{{ ovirt_auth }}"
             pattern: name={{ item }}
           register: result
-          until:
-            - result.ovirt_vms | length == 0
-            - result.ovirt_vms[0].guest_operating_system.kernel.version.build | default(None) != None
+          until: result.ovirt_vms[0].guest_operating_system.kernel.version.build | default(None) != None
+          failed_when: result.ovirt_vms | length == 0
           retries: 60
           delay: 10
           loop: "{{ vm_names }}"
