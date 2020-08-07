@@ -1,0 +1,77 @@
+- name: wait for ip to be available
+  hosts: localhost
+  connection: local
+  gather_facts: false
+#  vars:
+#    vm_names: "{{ vm_name.split(',') }}"
+
+  tasks:
+    - block:
+        - name: obtain SSO token with using username/password credentials
+          ovirt_auth:
+            url: "{{ lookup('env', 'OVIRT_URL')|default(ovirt.url) }}"
+            username: "{{ lookup('env', 'OVIRT_USERNAME')|default(ovirt.username) }}"
+            password: "{{ lookup('env', 'OVIRT_PASSWORD')|default(ovirt.password) }}"
+            insecure: yes
+
+#        - name: waiting for ip address to be assigned
+#          ovirt_nic_info:
+#            auth: "{{ ovirt_auth }}"
+#            vm: "{{ item.vm.name }}"
+#            name: nic1
+#          register: nics
+#          until:
+#            - nics.ovirt_nics | length > 0
+#            - nics.ovirt_nics[0].reported_devices | length > 0
+#            - nics.ovirt_nics[0].reported_devices[0].ips is defined
+#            - nics.ovirt_nics[0].reported_devices[0].ips | length > 0
+#            - nics.ovirt_nics[0].reported_devices[0].ips[0].address is defined
+#            - nics.ovirt_nics[0].reported_devices[0].ips[0].version == 'v4'
+#          retries: 300
+#          delay: 10
+#          with_items: "{{ instances.results }}"
+#          when:
+#            - nodes is defined
+#            - instances.results is defined
+#            - item.vm is defined
+#
+#        - name: waiting for servers to come online on dhcp ip
+#          wait_for:
+#            host: "{{ (item.ovirt_nics[0].reported_devices[0].ips | json_query('[?version==`v4`].address'))[0] }}"
+#            port: "{{ item.item.item.item.ansible_port | default(ansible_port) | default('22') }}"
+#          with_items: "{{ nics.results }}"
+#          when:
+#            - nodes is defined
+#            - nics.results is defined
+#            - item.ovirt_nics is defined
+#            - item.item.item.item.networks is defined
+#            - item.item.item.item.networks[0].ip is not defined
+
+        - name: Check if VM has agent installed for Linux
+          ovirt_vm_info:
+            auth: "{{ ovirt_auth }}"
+            pattern: name="lab1vm01.shadowman.dev"
+          register: result
+
+        - debug:
+            msg: "{{ result }}"
+
+#        - name: Check if VM has agent installed for Linux
+#          ovirt_vm_info:
+#            auth: "{{ ovirt_auth }}"
+#            pattern: name={{ item }}
+#          register: result
+#          until:  result.ovirt_vms[0].guest_operating_system.kernel.version.build is defined
+#          retries: 60
+#          delay: 10
+#          loop: "{{ vm_names }}"
+
+      always:
+        - name: revoke the SSO token
+          ovirt_auth:
+            url: "{{ lookup('env', 'OVIRT_URL')|default(ovirt.url) }}"
+            username: "{{ lookup('env', 'OVIRT_USERNAME')|default(ovirt.username) }}"
+            password: "{{ lookup('env', 'OVIRT_PASSWORD')|default(ovirt.password) }}"
+            insecure: yes
+            ovirt_auth: "{{ ovirt_auth }}"
+            state: absent
