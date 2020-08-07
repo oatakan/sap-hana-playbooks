@@ -2,8 +2,8 @@
   hosts: localhost
   connection: local
   gather_facts: false
-#  vars:
-#    vm_names: "{{ vm_name.split(',') }}"
+  vars:
+    vm_names: "{{ vm_name.split(',') | default([]) }}"
 
   tasks:
     - block:
@@ -50,21 +50,21 @@
         - name: Check if VM has agent installed for Linux
           ovirt_vm_info:
             auth: "{{ ovirt_auth }}"
-            pattern: name="lab1vm01.shadowman.dev"
+            pattern: name="lab1vm01"
           register: result
 
         - debug:
             msg: "{{ result }}"
 
-#        - name: Check if VM has agent installed for Linux
-#          ovirt_vm_info:
-#            auth: "{{ ovirt_auth }}"
-#            pattern: name={{ item }}
-#          register: result
-#          until:  result.ovirt_vms[0].guest_operating_system.kernel.version.build is defined
-#          retries: 60
-#          delay: 10
-#          loop: "{{ vm_names }}"
+        - name: Check if VM has agent installed for Linux
+          ovirt_vm_info:
+            auth: "{{ ovirt_auth }}"
+            pattern: name={{ item }}
+          register: result
+          until: result.ovirt_vms[0].guest_operating_system.kernel.version.build | default(None) is defined
+          retries: 60
+          delay: 10
+          loop: "{{ vm_names }}"
 
       always:
         - name: revoke the SSO token
