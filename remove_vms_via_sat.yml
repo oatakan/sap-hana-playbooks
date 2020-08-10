@@ -26,4 +26,4 @@
 
     # let's wait for a bit for removal to finish, should improve this later
     - pause:
-        seconds: 120
+        seconds: 30

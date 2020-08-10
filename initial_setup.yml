@@ -4,12 +4,9 @@
   hosts: lab1*
 
   tasks:
-  - debug:
-      msg: "we can do any post-provioning tasks here if needed..."
-
-#  - name: Subscribe to our Satellite using our activation key
-#    redhat_subscription:
-#      state: present
-#      activationkey: SAP HANA Server
-#      org_id: Shadow_Man
-#    failed_when: false
+  - name: Subscribe to our Satellite using our activation key
+    redhat_subscription:
+      state: present
+      activationkey: SAP HANA Server
+      org_id: Shadow_Man
+    failed_when: false
