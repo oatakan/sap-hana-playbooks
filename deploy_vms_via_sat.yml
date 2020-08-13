@@ -20,7 +20,7 @@
 #        organization: Shadow Man
 #        state: present
 
-    - name: create vm via satellite
+    - name: deploy vms via satellite (3)
       uri:
         url: "{{ lookup('env', 'FOREMAN_SERVER') }}/api/v2/hosts"
         user: "{{ lookup('env', 'FOREMAN_USER') }}"
@@ -48,3 +48,5 @@
         - deploy_status.json.error.full_messages is defined
         - "'Name has already been taken' not in deploy_status.json.error.full_messages"
       loop: "{{ range(1, 3 + 1, 1)|list }}"
+      loop_control:
+        loop_var: vm
