@@ -1,5 +1,5 @@
 - name: remove vms via satellite
-  hosts: all
+  hosts: "{{ vm_prefix }}*"
   gather_facts: no
 
   tasks:
@@ -23,7 +23,7 @@
       when: foreman.id | default(sat_host_id) | default(None) is defined
       delegate_to: localhost
 
-
-    # let's wait for a bit for removal to finish, should improve this later
-    - pause:
-        seconds: 30
+#
+#    # let's wait for a bit for removal to finish, should improve this later
+#    - pause:
+#        seconds: 30

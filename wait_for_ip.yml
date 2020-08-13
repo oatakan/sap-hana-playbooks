@@ -2,8 +2,6 @@
   hosts: localhost
   connection: local
   gather_facts: false
-  vars:
-    vm_names: "{{ vm_name.split(',') | default([]) }}"
 
   tasks:
     - block:
@@ -17,13 +15,15 @@
         - name: Check if VM has agent installed for Linux
           ovirt_vm_info:
             auth: "{{ ovirt_auth }}"
-            pattern: name={{ item }}
+            pattern: name="{{ vm_prefix + '%02d'|format(vm|int) }}"
           register: result
           until: result.ovirt_vms | length == 0 or result.ovirt_vms[0].guest_operating_system.kernel.version.build | default(None) != None
           failed_when: result.ovirt_vms | length == 0
           retries: 60
           delay: 10
-          loop: "{{ vm_names }}"
+          loop: "{{ range(1, 3 + 1, 1)|list }}"
+          loop_control:
+            loop_var: vm
 
       always:
         - name: revoke the SSO token
