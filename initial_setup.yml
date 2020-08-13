@@ -29,10 +29,16 @@
         path: "{{ local_repo_path }}"
         state: directory
 
+    - name: ensure nfs utils are present
+      package:
+        name:
+          - nfs-utils
+          - nfs4-acl-tools
+
     - name: ensure software repo is mounted
       mount:
         path: "{{ local_repo_path }}"
         src: "{{ software_repo_nfs_server }}:/{{ software_repo_path }}"
-        fstype: nfs4
+        fstype: nfs
         opts: ro,_netdev
         state: mounted
