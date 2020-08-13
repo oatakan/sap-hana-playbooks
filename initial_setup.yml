@@ -1,7 +1,7 @@
 ---
 
 - name: Set up VM
-  hosts: "{{ vm_prefix }}"
+  hosts: "{{ vm_prefix }}*"
 
   tasks:
   - name: Subscribe to our Satellite using our activation key
