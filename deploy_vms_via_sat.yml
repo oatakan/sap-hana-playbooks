@@ -32,7 +32,7 @@
         body_format: json
         body:
           host:
-            name: "{{ vm_prefix + '%02d'|format(item|int) }}"
+            name: "{{ vm_prefix + '%02d'|format(vm|int) }}"
             managed: "true"
             build: "true"
             hostgroup_id: "{{ hostgroup_id | default('16') }}"
