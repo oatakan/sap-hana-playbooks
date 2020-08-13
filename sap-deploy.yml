@@ -1,14 +1,15 @@
 ---
 
-- hosts: lab1*
+- hosts: "{{ vm_prefix }}*"
   roles:
-    - { role: redhat_sap.sap_rhsm }
-    - { role: redhat_sap.sap_hostagent }
+    - redhat_sap.sap_rhsm
+    - redhat_sap.sap_hostagent
 
-- hosts: lab1*02
+- hosts: "{{ vm_prefix }}02,{{ vm_prefix }}03"
   roles:
-    - { role: redhat_sap.sap_hana_deployment }
+    - sap-hana-preconfigure
+    - redhat_sap.sap_hana_deployment
 
-- hosts: lab1*01
+- hosts: "{{ vm_prefix }}01"
   roles:
-    - { role: redhat_sap.sap_s4hana_deployment }
+    - redhat_sap.sap_s4hana_deployment

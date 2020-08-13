@@ -4,9 +4,18 @@
   hosts: "{{ vm_prefix }}*"
 
   tasks:
-  - name: Subscribe to our Satellite using our activation key
-    redhat_subscription:
-      state: present
-      activationkey: SAP HANA Server
-      org_id: Shadow_Man
-    failed_when: false
+    - name: Subscribe to our Satellite using our activation key
+      redhat_subscription:
+        state: present
+        activationkey: SAP HANA Server
+        org_id: Shadow_Man
+      failed_when: false
+
+    - name: build hosts file
+      lineinfile:
+        dest: /etc/hosts
+        regexp: '.*{{ item }}$'
+        line: "{{ hostvars[item].ansible_default_ipv4.address }} {{ hostvars[item].fqdn }} {{ hostvars[item].hostname }}"
+        state: present
+      when: hostvars[item].ansible_default_ipv4.address is defined
+      loop: "{{ play_hosts }}"
