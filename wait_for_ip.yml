@@ -23,7 +23,7 @@
           failed_when: result.ovirt_vms | length == 0
           retries: 60
           delay: 10
-          loop: "{{ vm_names }}"
+          loop: "{{ vm_prefix | default(vm_names) }}"
 
       always:
         - name: revoke the SSO token
