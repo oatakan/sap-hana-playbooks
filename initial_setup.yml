@@ -33,6 +33,6 @@
       mount:
         path: "{{ local_repo_path }}"
         src: "{{ software_repo_nfs_server }}:/{{ software_repo_path }}"
-        fstype: nfs
-        opts: nolock
+        fstype: nfs4
+#        opts: nolock
         state: mounted
