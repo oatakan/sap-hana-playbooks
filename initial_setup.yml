@@ -2,6 +2,9 @@
 
 - name: Set up VM
   hosts: "{{ vm_prefix }}*"
+  software_repo_nfs_server: localhost
+  software_repo_path: /var/lib/exports/software
+  local_repo_path: /software
 
   tasks:
     - name: Subscribe to our Satellite using our activation key
@@ -19,3 +22,16 @@
         state: present
       when: hostvars[item].ansible_default_ipv4.address is defined
       loop: "{{ play_hosts }}"
+
+    - name: ensure software repo directory exists
+      file:
+        path: "{{ local_repo_path }}"
+        state: directory
+
+    - name: ensure software repo is mounted
+      mount:
+        path: "{{ local_repo_path }}"
+        src: "{{ software_repo_nfs_server }}:/{{ software_repo_path }}"
+        fstype: nfs
+        opts: nolock
+        state: mounted
