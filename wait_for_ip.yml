@@ -2,6 +2,7 @@
   hosts: localhost
   connection: local
   gather_facts: false
+  domain_name: example.com
 
   tasks:
     - block:
@@ -15,7 +16,7 @@
         - name: Check if VM has agent installed for Linux
           ovirt_vm_info:
             auth: "{{ ovirt_auth }}"
-            pattern: name="{{ vm_prefix + '%02d'|format(vm|int) }}"
+            pattern: name="{{ vm_prefix + '%02d'|format(vm|int) }}.{{ domain_name }}"
           register: result
           until: result.ovirt_vms | length == 0 or result.ovirt_vms[0].guest_operating_system.kernel.version.build | default(None) != None
           failed_when: result.ovirt_vms | length == 0
