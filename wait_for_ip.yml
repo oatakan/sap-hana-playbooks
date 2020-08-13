@@ -2,7 +2,8 @@
   hosts: localhost
   connection: local
   gather_facts: false
-  domain_name: example.com
+  vars:
+    domain_name: example.com
 
   tasks:
     - block:
