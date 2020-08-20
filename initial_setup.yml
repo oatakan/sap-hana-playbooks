@@ -13,6 +13,7 @@
         state: present
         activationkey: SAP HANA Server
         org_id: Shadow_Man
+        auto_attach: yes
       failed_when: false
 
     - name: build hosts file
