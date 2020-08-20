@@ -41,6 +41,9 @@
             compute_attributes:
               start: '1'
       register: deploy_status
+      until: deploy_status is success
+      delay: 5
+      retries: 20
       changed_when:
         - deploy_status.status | int == 201
       failed_when:
