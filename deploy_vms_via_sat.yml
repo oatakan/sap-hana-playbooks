@@ -41,7 +41,7 @@
             compute_attributes:
               start: '1'
       register: deploy_status
-      until: deploy_status is success
+      until: ('Unable to set DNS entry' not in (deploy_status.json.error.erros.base[0] | default('')))
       delay: 5
       retries: 20
       changed_when:
