@@ -6,12 +6,15 @@
     software_repo_nfs_server: localhost
     software_repo_path: /var/lib/exports/software
     local_repo_path: /software
+    activation_keys:
+      S4_Image: SAP S4 Server
+      HANA_Image: SAP HANA Server
 
   tasks:
     - name: Subscribe to our Satellite using our activation key
       redhat_subscription:
         state: present
-        activationkey: SAP HANA Server
+        activationkey: "{{ activation_keys[foreman.hostgroup_name] | default('SAP HANA Server') }}"
         org_id: Shadow_Man
         auto_attach: true
       failed_when: false

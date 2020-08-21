@@ -5,8 +5,23 @@
 #    -  theforeman.foreman
   vars:
     vm_prefix: lab1vm
+    hostgroup_ids:
+      hana: 16
+      s4: 17
 
   tasks:
+    - name: generate s4 node
+      set_fact:
+        nodes: "{{ [ {'name': vm_prefix + '%02d'|format(1), 'hostgroup_id': hostgroup_ids['s4']} ] }}"
+
+    - name: generate hana nodes
+      set_fact:
+        nodes: "{{ nodes|default([]) + [ {'name': vm_prefix + '%02d'|format(1+(item|int)), 'hostgroup_id': hostgroup_ids['hana']} ] }}"
+      loop: "{{ range(1, 2 + 1, 1)|list }}"
+
+    - debug:
+        msg: "{{ nodes }}"
+
 #    - name: create host via satellite
 #      host:
 #        server_url: "{{ lookup('env', 'FOREMAN_SERVER') }}"
@@ -20,7 +35,7 @@
 #        organization: Shadow Man
 #        state: present
 
-    - name: deploy vms via satellite (3)
+    - name: deploy vms
       uri:
         url: "{{ lookup('env', 'FOREMAN_SERVER') }}/api/v2/hosts"
         user: "{{ lookup('env', 'FOREMAN_USER') }}"
@@ -32,10 +47,10 @@
         body_format: json
         body:
           host:
-            name: "{{ vm_prefix + '%02d'|format(vm|int) }}"
+            name: "{{ vm.name }}"
             managed: "true"
             build: "true"
-            hostgroup_id: "{{ hostgroup_id | default('16') }}"
+            hostgroup_id: "{{ vm.hostgroup_id }}"
             location_id: "{{ location_id | default('2') }}"
             organization_id: "{{ organization_id | default('1') }}"
             compute_attributes:
@@ -50,6 +65,6 @@
         - deploy_status.status | int != 201
         - deploy_status.json.error.full_messages is defined
         - "'Name has already been taken' not in deploy_status.json.error.full_messages"
-      loop: "{{ range(1, 3 + 1, 1)|list }}"
+      loop: "{{ nodes }}"
       loop_control:
         loop_var: vm
