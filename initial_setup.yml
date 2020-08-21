@@ -21,6 +21,13 @@
       command: subscription-manager attach
       failed_when: false
 
+    - name: unset role and usage
+      command: "{{ item }}"
+      failed_when: false
+      loop:
+        - syspurpose unset role
+        - syspurpose unset usage
+
     - name: build hosts file
       lineinfile:
         dest: /etc/hosts
