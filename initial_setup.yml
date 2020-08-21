@@ -14,7 +14,7 @@
     - name: Subscribe to our Satellite using our activation key
       redhat_subscription:
         state: present
-        activationkey: "{{ activation_keys[foreman.hostgroup_name] | default('SAP HANA Server') }}"
+#        activationkey: "{{ activation_keys[foreman.hostgroup_name] | default('SAP HANA Server') }}"
         org_id: Shadow_Man
         auto_attach: true
       failed_when: false
