@@ -4,7 +4,7 @@
 
   tasks:
 
-    - name: delete vm via satellite
+    - name: delete vm
       uri:
         url: "{{ lookup('env', 'FOREMAN_SERVER') }}/api/v2/hosts/{{ foreman.id | default(sat_host_id) }}"
         user: "{{ lookup('env', 'FOREMAN_USER') }}"

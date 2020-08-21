@@ -5,18 +5,22 @@
 #    -  theforeman.foreman
   vars:
     vm_prefix: lab1vm
-    hostgroup_ids:
-      hana: 16
-      s4: 17
+    hostgroups:
+      hana:
+        name: HANA_Image
+        id: 16
+      s4:
+        name: S4_Image
+        id: 17
 
   tasks:
     - name: generate s4 node
       set_fact:
-        nodes: "{{ [ {'name': vm_prefix + '%02d'|format(1), 'hostgroup_id': hostgroup_ids['s4']} ] }}"
+        nodes: "{{ [ {'name': vm_prefix + '%02d'|format(1), 'hostgroup_name': hostgroups['s4'].name, 'hostgroup_id': hostgroups['s4'].id} ] }}"
 
     - name: generate hana nodes
       set_fact:
-        nodes: "{{ nodes|default([]) + [ {'name': vm_prefix + '%02d'|format(1+(item|int)), 'hostgroup_id': hostgroup_ids['hana']} ] }}"
+        nodes: "{{ nodes|default([]) + [ {'name': vm_prefix + '%02d'|format(1+(item|int)), 'hostgroup_name': hostgroups['hana'].name, 'hostgroup_id': hostgroups['hana'].id} ] }}"
       loop: "{{ range(1, 2 + 1, 1)|list }}"
 
     - debug:
