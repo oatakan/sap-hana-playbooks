@@ -34,6 +34,7 @@
     - name: check subscription status
       command: subscription-manager status
       register: sat_sub_status
+      failed_when: false
 
     - name: output subscription status
       debug:
