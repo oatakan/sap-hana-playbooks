@@ -6,5 +6,5 @@
   roles:
     - role: ondrejhome.ha-cluster-pacemaker
       cluster_name: 'test-cluster'
-      cluster_firewall: false
+      cluster_firewall: true
       cluster_configure_fence_xvm: false
