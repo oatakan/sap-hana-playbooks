@@ -8,3 +8,6 @@ roles:
     src: https://github.com/redhat-sap/sap-hana-deployment.git
   - name: redhat_sap.sap_s4hana_deployment
     src: https://github.com/redhat-sap/sap-s4hana-deployment.git
+  - src: https://github.com/OndrejHome/ansible.ha-cluster-pacemaker.git
+    version: origin/master
+    name: ondrejhome.ha-cluster-pacemaker
