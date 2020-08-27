@@ -65,5 +65,5 @@
         path: "{{ local_repo_path }}"
         src: "{{ software_repo_nfs_server }}:/{{ software_repo_path }}"
         fstype: nfs
-        opts: ro,_netdev
+        opts: rw,_netdev
         state: mounted
