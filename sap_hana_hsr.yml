@@ -1,0 +1,5 @@
+---
+
+- hosts: "{{ vm_prefix }}*"
+  roles:
+    - sap_hana_hsr

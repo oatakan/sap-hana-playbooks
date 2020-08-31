@@ -1,0 +1,12 @@
+galaxy_info:
+  author: Red Hat SAP Community of Practice
+  description: Configure SAP HANA System Replication on existing SAP HANA deployments in RHEL
+  license: GPLv3
+  min_ansible_version: 2.9
+  platforms:
+  - name: EL
+    versions: [ 7, 8 ]
+
+  galaxy_tags: [ 'sap', 'hana', 'hsr', 'ha', 'replication' ]
+
+dependencies: []
