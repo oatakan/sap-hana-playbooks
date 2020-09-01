@@ -35,6 +35,7 @@
 #        hostgroup: "{{ vm.hostgroup_name }}"
 #        managed: true
 #        build: true
+#        provision_method: image
 #        location: Chattanooga
 #        organization: Shadow Man
 #        state: present

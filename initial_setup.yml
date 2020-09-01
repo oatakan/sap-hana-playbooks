@@ -11,25 +11,25 @@
       HANA_Image: SAP HANA Server
 
   tasks:
-    - name: Subscribe to our Satellite using our activation key
-      redhat_subscription:
-        state: present
-        activationkey: "{{ activation_keys[foreman.hostgroup_name] | default('SAP HANA Server') }}"
-        org_id: Shadow_Man
-        auto_attach: true
-      failed_when: false
-
-    # this shouldn't be needed normally but auto-attach doesn't seem to always work
-    - name: attach susbscription
-      command: subscription-manager attach
-      failed_when: false
-
-    - name: unset role and usage
-      command: "{{ item }}"
-      failed_when: false
-      loop:
-        - syspurpose unset role
-        - syspurpose unset usage
+#    - name: Subscribe to our Satellite using our activation key
+#      redhat_subscription:
+#        state: present
+#        activationkey: "{{ activation_keys[foreman.hostgroup_name] | default('SAP HANA Server') }}"
+#        org_id: Shadow_Man
+#        auto_attach: true
+#      failed_when: false
+#
+#    # this shouldn't be needed normally but auto-attach doesn't seem to always work
+#    - name: attach susbscription
+#      command: subscription-manager attach
+#      failed_when: false
+#
+#    - name: unset role and usage
+#      command: "{{ item }}"
+#      failed_when: false
+#      loop:
+#        - syspurpose unset role
+#        - syspurpose unset usage
 
     - name: check subscription status
       command: subscription-manager status
