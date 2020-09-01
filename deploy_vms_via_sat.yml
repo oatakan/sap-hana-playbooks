@@ -56,8 +56,8 @@
             build: "true"
             hostgroup_id: "{{ vm.hostgroup_id }}"
             image_id: "{{ image_id | default('10') }}"
-            medium_id: "{{ medium_id | default('null') }}"
-            pxe_loader: "{{ pxe_loader | default('PXELinux BIOS') }}"
+            content_source_id: "{{ content_source_id | default('1') }}"
+#            pxe_loader: "{{ pxe_loader | default('PXELinux BIOS') }}"
             location_id: "{{ location_id | default('2') }}"
             organization_id: "{{ organization_id | default('1') }}"
             compute_attributes:
