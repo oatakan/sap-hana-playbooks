@@ -31,7 +31,7 @@
 #        server_url: "{{ lookup('env', 'FOREMAN_SERVER') }}"
 #        username: "{{ lookup('env', 'FOREMAN_USER') }}"
 #        password: "{{ lookup('env', 'FOREMAN_PASSWORD') }}"
-#        name: "{{ vm_name }}.{{ domain_name }}"
+#        name: "{{ vm.name }}"
 #        hostgroup: "{{ sat_host_group }}"
 #        managed: true
 #        build: true
@@ -56,6 +56,7 @@
             build: "true"
             hostgroup_id: "{{ vm.hostgroup_id }}"
             image_id: "{{ image_id | default('10') }}"
+            medium_id: "{{ medium_id | default('null') }}"
             location_id: "{{ location_id | default('2') }}"
             organization_id: "{{ organization_id | default('1') }}"
             compute_attributes:
