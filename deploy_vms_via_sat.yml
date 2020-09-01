@@ -32,12 +32,15 @@
 #        username: "{{ lookup('env', 'FOREMAN_USER') }}"
 #        password: "{{ lookup('env', 'FOREMAN_PASSWORD') }}"
 #        name: "{{ vm.name }}"
-#        hostgroup: "{{ sat_host_group }}"
+#        hostgroup: "{{ vm.hostgroup_name }}"
 #        managed: true
 #        build: true
 #        location: Chattanooga
 #        organization: Shadow Man
 #        state: present
+#      loop: "{{ nodes }}"
+#      loop_control:
+#        loop_var: vm
 
     - name: deploy vms
       uri:
@@ -53,10 +56,10 @@
           host:
             name: "{{ vm.name }}"
             managed: "true"
-            build: "false"
+            build: "true"
             hostgroup_id: "{{ vm.hostgroup_id }}"
             image_id: "{{ image_id | default('10') }}"
-#            medium_id: "{{ provision_method | default('image') }}"
+            provision_method: "{{ provision_method | default('image') }}"
             location_id: "{{ location_id | default('2') }}"
             organization_id: "{{ organization_id | default('1') }}"
             compute_attributes:
