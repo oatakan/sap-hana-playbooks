@@ -57,7 +57,7 @@
             hostgroup_id: "{{ vm.hostgroup_id }}"
             image_id: "{{ image_id | default('10') }}"
             content_source_id: "{{ content_source_id | default('1') }}"
-#            pxe_loader: "{{ pxe_loader | default('PXELinux BIOS') }}"
+            kickstart_repository_id: "{{ kickstart_repository_id | default('1') }}"
             location_id: "{{ location_id | default('2') }}"
             organization_id: "{{ organization_id | default('1') }}"
             compute_attributes:
