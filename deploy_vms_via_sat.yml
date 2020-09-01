@@ -56,6 +56,7 @@
             build: "true"
             hostgroup_id: "{{ vm.hostgroup_id }}"
             image_id: "{{ image_id | default('10') }}"
+            medium_id: "{{ medium_id | default('null') }}"
             content_source_id: "{{ content_source_id | default('1') }}"
             kickstart_repository_id: "{{ kickstart_repository_id | default('1') }}"
             location_id: "{{ location_id | default('2') }}"
