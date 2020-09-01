@@ -53,12 +53,10 @@
           host:
             name: "{{ vm.name }}"
             managed: "true"
-            build: "true"
+            build: "false"
             hostgroup_id: "{{ vm.hostgroup_id }}"
             image_id: "{{ image_id | default('10') }}"
-            medium_id: "{{ medium_id | default('null') }}"
-            content_source_id: "{{ content_source_id | default('1') }}"
-            kickstart_repository_id: "{{ kickstart_repository_id | default('1') }}"
+#            medium_id: "{{ provision_method | default('image') }}"
             location_id: "{{ location_id | default('2') }}"
             organization_id: "{{ organization_id | default('1') }}"
             compute_attributes:
