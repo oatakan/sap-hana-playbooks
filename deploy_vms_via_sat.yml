@@ -55,6 +55,7 @@
             managed: "true"
             build: "true"
             hostgroup_id: "{{ vm.hostgroup_id }}"
+            image_id: "{{ image_id | default('10') }}"
             location_id: "{{ location_id | default('2') }}"
             organization_id: "{{ organization_id | default('1') }}"
             compute_attributes:
