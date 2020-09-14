@@ -39,14 +39,7 @@
     msg: "{{ backup_command }}"
 
 - name: Ensure a backup exists for SYSTEM
-  shell: |
-      source /usr/sap/{{ sap_hana_hsr_hana_sid }}/home/.sapenv.sh && \
-      /usr/sap/{{ sap_hana_hsr_hana_sid | upper }}/HDB{{ sap_hana_hsr_hana_instance_number }}/exe/hdbsql \
-      -i {{ sap_hana_hsr_hana_instance_number }} -u SYSTEM -p {{ sap_hana_hsr_hana_db_system_password }} -d SYSTEMDB -m <<EOF
-      BACKUP DATA USING FILE ('system_bck');
-      EOF
-  args:
-     executable: /bin/bash
+  script: system_bck.sh
   become: yes
   become_user: "{{ sap_hana_hsr_hana_sid | lower }}adm"
   register: systembackup
@@ -55,14 +48,7 @@
     - sap_hana_hsr_role == 'primary'
 
 - name: Ensure a backup exists for {{ sap_hana_hsr_hana_sid }}
-  shell: |
-      source /usr/sap/{{ sap_hana_hsr_hana_sid }}/home/.sapenv.sh && \
-      /usr/sap/{{ sap_hana_hsr_hana_sid | upper }}/HDB{{ sap_hana_hsr_hana_instance_number }}/exe/hdbsql \
-      -i {{ sap_hana_hsr_hana_instance_number }} -u SYSTEM -p {{ sap_hana_hsr_hana_db_system_password }} -d SYSTEMDB -m <<EOF
-      BACKUP DATA FOR {{ sap_hana_hsr_hana_sid }} USING FILE ('data_bck');
-      EOF
-  args:
-     executable: /bin/bash
+  shell: data_bck.sh
   become: yes
   become_user: "{{ sap_hana_hsr_hana_sid | lower }}adm"
   register: databackup
