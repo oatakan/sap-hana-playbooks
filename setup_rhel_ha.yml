@@ -2,6 +2,7 @@
 
 - name: Set up HA for HANA
   hosts: "{{ vm_prefix }}*:&foreman_hana_image"
+  gather_facts: True
 
   pre_tasks:
     - debug:
