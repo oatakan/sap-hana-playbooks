@@ -42,6 +42,7 @@
   template:
     src: system_bck.sh
     dest: /tmp/system_bck.sh
+    mode: 0777
   become: yes
   become_user: "{{ sap_hana_hsr_hana_sid | lower }}adm"
 
