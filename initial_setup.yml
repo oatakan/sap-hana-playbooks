@@ -54,9 +54,10 @@
         path: "{{ local_repo_path }}"
         state: directory
 
-    - name: ensure nfs utils are present
+    - name: ensure prereq packages are present
       package:
         name:
+          - compat-sap-c++-9
           - nfs-utils
           - nfs4-acl-tools
 
