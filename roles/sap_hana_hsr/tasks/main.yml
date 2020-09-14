@@ -38,8 +38,15 @@
   debug:
     msg: "{{ backup_command }}"
 
+- name: create a backup script
+  template:
+    src: system_bck.sh
+    dest: /tmp/system_bck.sh
+  become: yes
+  become_user: "{{ sap_hana_hsr_hana_sid | lower }}adm"
+
 - name: Ensure a backup exists for SYSTEM
-  script: system_bck.sh
+  shell: /tmp/system_bck.sh
   become: yes
   become_user: "{{ sap_hana_hsr_hana_sid | lower }}adm"
   register: systembackup
