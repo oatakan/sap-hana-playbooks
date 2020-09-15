@@ -48,11 +48,12 @@
 
     - name: test whoami 5 (source)
       shell: |
-        source /usr/sap/{{ sap_hana_hsr_hana_sid }}/home/.sapenv.sh
+        . /usr/sap/{{ sap_hana_hsr_hana_sid }}/home/.sapenv.sh
       args:
-        executable: /bin/sh
+        executable: /bin/bash
       become: yes
       become_user: "{{ sap_hana_hsr_hana_sid | lower }}adm"
+      become_method: su
       register: whoami5
 
     - debug:
