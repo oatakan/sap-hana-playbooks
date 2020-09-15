@@ -47,9 +47,9 @@
   become_user: "{{ sap_hana_hsr_hana_sid | lower }}adm"
 
 - name: Ensure a backup exists for SYSTEM
-  shell: /tmp/system_bck.sh
-  become: yes
-  become_user: "{{ sap_hana_hsr_hana_sid | lower }}adm"
+  shell: sudo -H -S -n -u {{ sap_hana_hsr_hana_sid | lower }}adm /bin/sh -c "/tmp/system_bck.sh"
+#  become: yes
+#  become_user: "{{ sap_hana_hsr_hana_sid | lower }}adm"
   register: systembackup
   changed_when: "'0 rows affected' in systembackup.stdout"
   when:
