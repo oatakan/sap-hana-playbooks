@@ -48,7 +48,7 @@
 #
     - name: test whoami 5 (source)
       shell: |
-        . /usr/sap/{{ sap_hana_hsr_hana_sid }}/home/.sapenv.sh && \
+        source /usr/sap/{{ sap_hana_hsr_hana_sid }}/home/.sapenv.sh && \
         whoami
       args:
         executable: /bin/bash
@@ -62,7 +62,7 @@
 
     - name: test whoami 6 (source)
       shell: |
-        . /usr/sap/{{ sap_hana_hsr_hana_sid }}/home/.sapenv.sh && \
+        source /usr/sap/{{ sap_hana_hsr_hana_sid }}/home/.sapenv.sh && \
         echo <<EOF
         BACKUP DATA USING FILE ('system_bck');
         EOF
@@ -76,5 +76,5 @@
     - debug:
         msg: "{{ whoami6 }}"
 
-  roles:
-    - sap_hana_hsr
+#  roles:
+#    - sap_hana_hsr
