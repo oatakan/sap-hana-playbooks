@@ -76,5 +76,5 @@
     - debug:
         msg: "{{ whoami6 }}"
 
-#  roles:
-#    - sap_hana_hsr
+  roles:
+    - sap_hana_hsr
