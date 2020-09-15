@@ -54,12 +54,13 @@
         executable: /bin/bash
       become: yes
       become_user: "{{ sap_hana_hsr_hana_sid | lower }}adm"
+      become_method: su
       register: whoami5
 
     - debug:
         msg: "{{ whoami5 }}"
 
-    - name: test whoami 5 (source)
+    - name: test whoami 6 (source)
       shell: |
         . /usr/sap/{{ sap_hana_hsr_hana_sid }}/home/.sapenv.sh && \
         echo <<EOF
@@ -70,10 +71,10 @@
       become: yes
       become_user: "{{ sap_hana_hsr_hana_sid | lower }}adm"
       become_method: su
-      register: whoami5
+      register: whoami6
 
     - debug:
-        msg: "{{ whoami5 }}"
+        msg: "{{ whoami6 }}"
 
 #  roles:
 #    - sap_hana_hsr
