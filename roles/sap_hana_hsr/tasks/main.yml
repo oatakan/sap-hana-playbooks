@@ -80,6 +80,7 @@
     executable: /bin/bash
   become: yes
   become_user: "{{ sap_hana_hsr_hana_sid | lower }}adm"
+  become_method: sudo
   register: enablesr
   changed_when: "'successfully enabled system as system replication source site' in enablesr.stdout"
   when:
