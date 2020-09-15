@@ -2,5 +2,17 @@
 
 - hosts: "{{ vm_prefix }}*"
   any_errors_fatal: true
-  roles:
-    - sap_hana_hsr
+
+  pre_tasks:
+    - name: test whoami
+      command: whoami
+      become: yes
+      become_user: "{{ sap_hana_hsr_hana_sid | lower }}adm"
+      become_method: su
+      register: whoami
+
+    - debug:
+        msg: "{{ whoami }}"
+
+#  roles:
+#    - sap_hana_hsr

@@ -64,8 +64,10 @@
       EOF
   args:
      executable: /bin/bash
-#  become: yes
-#  become_user: "{{ sap_hana_hsr_hana_sid | lower }}adm"
+  become: yes
+  become_user: "{{ sap_hana_hsr_hana_sid | lower }}adm"
+  become_method: su
+#  become_flags: '-s /bin/sh'
   register: databackup
   changed_when: "'0 rows affected' in databackup.stdout"
   when:
@@ -80,7 +82,7 @@
     executable: /bin/bash
   become: yes
   become_user: "{{ sap_hana_hsr_hana_sid | lower }}adm"
-  become_method: sudo
+  become_method: su
   register: enablesr
   changed_when: "'successfully enabled system as system replication source site' in enablesr.stdout"
   when:
