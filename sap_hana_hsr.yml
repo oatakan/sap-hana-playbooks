@@ -2,8 +2,9 @@
 
 - hosts: "{{ vm_prefix }}*"
   any_errors_fatal: true
+#  become_method: su
 
-  pre_tasks:
+#  pre_tasks:
 #    - name: test whoami (command with su)
 #      command: whoami
 #      become: yes
@@ -46,33 +47,33 @@
 #    - debug:
 #        msg: "{{ whoami4 }}"
 #
-    - name: test whoami 5 (source)
-      shell: |
-        source /usr/sap/{{ sap_hana_hsr_hana_sid }}/home/.sapenv.sh && \
-        whoami
-      args:
-        executable: /bin/bash
-      become: yes
-      become_user: "{{ sap_hana_hsr_hana_sid | lower }}adm"
-      register: whoami5
+#    - name: test whoami 5 (source)
+#      shell: |
+#        source /usr/sap/{{ sap_hana_hsr_hana_sid }}/home/.sapenv.sh && \
+#        whoami
+#      args:
+#        executable: /bin/bash
+#      become: yes
+#      become_user: "{{ sap_hana_hsr_hana_sid | lower }}adm"
+#      register: whoami5
+#
+#    - debug:
+#        msg: "{{ whoami5 }}"
+#
+#    - name: test whoami 6 (source)
+#      shell: |
+#        source /usr/sap/{{ sap_hana_hsr_hana_sid }}/home/.sapenv.sh && \
+#        echo <<EOF
+#        BACKUP DATA USING FILE ('system_bck');
+#        EOF
+#      args:
+#        executable: /bin/bash
+#      become: yes
+#      become_user: "{{ sap_hana_hsr_hana_sid | lower }}adm"
+#      register: whoami6
+#
+#    - debug:
+#        msg: "{{ whoami6 }}"
 
-    - debug:
-        msg: "{{ whoami5 }}"
-
-    - name: test whoami 6 (source)
-      shell: |
-        source /usr/sap/{{ sap_hana_hsr_hana_sid }}/home/.sapenv.sh && \
-        echo <<EOF
-        BACKUP DATA USING FILE ('system_bck');
-        EOF
-      args:
-        executable: /bin/bash
-      become: yes
-      become_user: "{{ sap_hana_hsr_hana_sid | lower }}adm"
-      register: whoami6
-
-    - debug:
-        msg: "{{ whoami6 }}"
-
-#  roles:
-#    - sap_hana_hsr
+  roles:
+    - sap_hana_hsr
