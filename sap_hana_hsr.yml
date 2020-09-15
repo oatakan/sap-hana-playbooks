@@ -48,7 +48,8 @@
 
     - name: test whoami 5 (source)
       shell: |
-        . /usr/sap/{{ sap_hana_hsr_hana_sid }}/home/.sapenv.sh
+        . /usr/sap/{{ sap_hana_hsr_hana_sid }}/home/.sapenv.sh && \
+        whoami
       args:
         executable: /bin/bash
       become: yes
