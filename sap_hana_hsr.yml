@@ -50,7 +50,7 @@
       shell: |
         source /usr/sap/{{ sap_hana_hsr_hana_sid }}/home/.sapenv.sh
       args:
-        executable: /bin/bash
+        executable: /bin/sh
       become: yes
       become_user: "{{ sap_hana_hsr_hana_sid | lower }}adm"
       register: whoami5
