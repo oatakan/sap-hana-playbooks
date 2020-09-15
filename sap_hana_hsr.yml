@@ -35,7 +35,9 @@
         msg: "{{ whoami3 }}"
 
     - name: test whoami 4 (shell with sudo)
-      shell: whoami
+      shell: |
+        source /usr/sap/{{ sap_hana_hsr_hana_sid }}/home/.sapenv.sh && \
+        whoami
       args:
         executable: /bin/bash
       become: yes
