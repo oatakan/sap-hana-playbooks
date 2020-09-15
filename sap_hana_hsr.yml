@@ -4,7 +4,7 @@
   any_errors_fatal: true
 
   pre_tasks:
-    - name: test whoami
+    - name: test whoami (command with su)
       command: whoami
       become: yes
       become_user: "{{ sap_hana_hsr_hana_sid | lower }}adm"
@@ -13,6 +13,36 @@
 
     - debug:
         msg: "{{ whoami }}"
+
+    - name: test whoami (command with sudo)
+      command: whoami
+      become: yes
+      become_user: "{{ sap_hana_hsr_hana_sid | lower }}adm"
+      become_method: sudo
+      register: whoami2
+
+    - debug:
+        msg: "{{ whoami2 }}"
+
+    - name: test whoami 3 (shell with su)
+      shell: whoami
+      become: yes
+      become_user: "{{ sap_hana_hsr_hana_sid | lower }}adm"
+      become_method: su
+      register: whoami3
+
+    - debug:
+        msg: "{{ whoami3 }}"
+
+    - name: test whoami 4 (shell with sudo)
+      shell: whoami
+      become: yes
+      become_user: "{{ sap_hana_hsr_hana_sid | lower }}adm"
+      become_method: sudo
+      register: whoami4
+
+    - debug:
+        msg: "{{ whoami4 }}"
 
 #  roles:
 #    - sap_hana_hsr
