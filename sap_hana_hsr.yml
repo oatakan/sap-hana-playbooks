@@ -54,7 +54,6 @@
         executable: /bin/bash
       become: yes
       become_user: "{{ sap_hana_hsr_hana_sid | lower }}adm"
-      become_method: su
       register: whoami5
 
     - debug:
@@ -70,7 +69,6 @@
         executable: /bin/bash
       become: yes
       become_user: "{{ sap_hana_hsr_hana_sid | lower }}adm"
-      become_method: su
       register: whoami6
 
     - debug:
