@@ -36,9 +36,10 @@
 
     - name: test whoami 4 (shell with sudo)
       shell: whoami
+      args:
+        executable: /bin/bash
       become: yes
       become_user: "{{ sap_hana_hsr_hana_sid | lower }}adm"
-      become_method: sudo
       register: whoami4
 
     - debug:
