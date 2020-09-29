@@ -1,0 +1,19 @@
+---
+
+- name: preconfigure all nodes
+  hosts: "{{ vm_prefix }}*"
+
+  roles:
+    - sap-preconfigure
+
+- name: preconfigure netweaver
+  hosts: "{{ vm_prefix }}*:&foreman_s4_image"
+
+  roles:
+    - sap-netweaver-preconfigure
+
+- name: preconfigure hana
+  hosts: "{{ vm_prefix }}*:&foreman_hana_image"
+
+  roles:
+    - sap-hana-preconfigure
