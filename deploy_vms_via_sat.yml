@@ -57,7 +57,7 @@
           host:
             name: "{{ vm.name }}"
             managed: "true"
-            build: "true"
+            build: "false"
             hostgroup_id: "{{ vm.hostgroup_id }}"
             image_id: "{{ image_id | default('10') }}"
             operatingsystem_id: "{{ operatingsystem_id | default('2') }}"
