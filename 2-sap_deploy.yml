@@ -9,7 +9,7 @@
   become_method: su
   pre_tasks:
     - debug:
-        msg: "{{ sap_hana_hsr_role }} - {{ sap_hana_hsr_alias }}"
+        msg: "hrs_role/alias: {{ sap_hana_hsr_role }} / {{ sap_hana_hsr_alias }}"
   roles:
     - redhat_sap.sap_hana_deployment
     - redhat_sap.sap_hana_hsr
