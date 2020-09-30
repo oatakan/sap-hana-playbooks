@@ -8,6 +8,8 @@
 - hosts: "{{ vm_prefix }}*:&*hana_image"
   become_method: su
   pre_tasks:
+    - debug:
+        msg: "{{ groups['foreman_hana_image'].index(inventory_hostname) }}"
     - name: set hsr role and alias
       set_fact:
         sap_hana_hsr_role: "{{ sap_hana_hsr_roles[groups['foreman_hana_image'].index(inventory_hostname)] }}"
