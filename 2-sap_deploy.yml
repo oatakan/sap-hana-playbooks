@@ -6,9 +6,11 @@
     - redhat_sap.sap_hostagent
 
 - hosts: "{{ vm_prefix }}*:&*hana_image"
+  become_method: su
   roles:
-    - sap-hana-preconfigure
     - redhat_sap.sap_hana_deployment
+    - redhat_sap.sap_hana_hsr
+    - redhat_sap.sap_hana_ha_pacemaker
 
 - hosts: "{{ vm_prefix }}*:&*s4_image"
   roles:
