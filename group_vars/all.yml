@@ -1,3 +1,4 @@
+---
 sap_hostagent_installation_type: "rpm"
 sap_hostagent_rpm_remote_path: "/software/SAPHOSTAGENT"
 sap_hostagent_rpm_file_name: "saphostagentrpm_48-20009394.rpm"
