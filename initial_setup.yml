@@ -72,5 +72,5 @@
     - name: set grub to default to the old kernel for kernel patching scenario
       shell: /usr/sbin/grubby --set-default-index=1
 
-    - name: Reboot the machine
-      reboot:
+#    - name: Reboot the machine
+#      reboot:
