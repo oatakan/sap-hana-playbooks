@@ -7,13 +7,6 @@ sap_hostagent_rpm_file_name: "saphostagentrpm_48-20009394.rpm"
 sap_rhsm_pools_ids:
   - "mypoolidinfo"
 
-sap_hana_hsr_roles:
-  - primary
-  - secondary
-
-sap_hana_hsr_aliases:
-  - hdb1
-  - hdb2
-
-sap_hana_hsr_role: "{{ sap_hana_hsr_roles[ansible_play_hosts.index(inventory_hostname)] }}"
-sap_hana_hsr_alias: "{{ sap_hana_hsr_aliases[ansible_play_hosts.index(inventory_hostname)] }}"
+software_repo_nfs_server: localhost
+software_repo_path: /var/lib/exports/software
+local_repo_path: /software

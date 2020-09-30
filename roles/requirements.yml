@@ -22,3 +22,4 @@ roles:
     src: https://github.com/redhat-sap/sap-rhsm.git
   - src: redhat_sap.sap_s4hana_deployment
     version: v1.1.0
+  - src: https://github.com/linux-system-roles/storage.git
