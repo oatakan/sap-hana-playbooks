@@ -7,6 +7,9 @@
 
 - hosts: "{{ vm_prefix }}*:&*hana_image"
   become_method: su
+  vars:
+    sap_hana_hsr_role: "{{ sap_hana_hsr_roles[groups['foreman_hana_image'].index(inventory_hostname)] }}"
+    sap_hana_hsr_alias: "{{ sap_hana_hsr_aliases[groups['foreman_hana_image'].index(inventory_hostname)] }}"
   roles:
     - redhat_sap.sap_hana_deployment
     - redhat_sap.sap_hana_hsr

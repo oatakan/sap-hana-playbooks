@@ -6,3 +6,10 @@ sap_hostagent_rpm_file_name: "saphostagentrpm_48-20009394.rpm"
 sap_rhsm_pools_ids:
   - "mypoolidinfo"
 
+sap_hana_hsr_roles:
+  - primary
+  - secondary
+
+sap_hana_hsr_aliases:
+  - hdb1
+  - hdb2
