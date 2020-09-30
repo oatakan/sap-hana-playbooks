@@ -9,11 +9,11 @@
   become_method: su
   pre_tasks:
     - debug:
-        msg: "{{ groups['foreman_hana_image'].index(inventory_hostname) }}"
+        msg: "{{ ansible_play_hosts.index(inventory_hostname) }}"
     - name: set hsr role and alias
       set_fact:
-        sap_hana_hsr_role: "{{ sap_hana_hsr_roles[groups['foreman_hana_image'].index(inventory_hostname)] }}"
-        sap_hana_hsr_alias: "{{ sap_hana_hsr_aliases[groups['foreman_hana_image'].index(inventory_hostname)] }}"
+        sap_hana_hsr_role: "{{ sap_hana_hsr_roles[ansible_play_hosts.index(inventory_hostname)] }}"
+        sap_hana_hsr_alias: "{{ sap_hana_hsr_aliases[ansible_play_hosts.index(inventory_hostname)] }}"
   roles:
     - redhat_sap.sap_hana_deployment
     - redhat_sap.sap_hana_hsr
