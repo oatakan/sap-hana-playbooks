@@ -7,6 +7,8 @@ sap_hostagent_rpm_file_name: "saphostagentrpm_48-20009394.rpm"
 sap_rhsm_pools_ids:
   - "mypoolidinfo"
 
+sap_password: "mysecretPassw0rd!"
+
 software_repo_nfs_server: localhost
 software_repo_path: /var/lib/exports/software
 local_repo_path: /software
