@@ -3,7 +3,7 @@
 
   vars:
     application_url: http://127.0.0.1:5000
-    verify_task_timeout: 900
+    verify_task_timeout: 30
 
   tasks:
 #    - name: exit when no connection
@@ -20,7 +20,7 @@
 
     - name: exit when no connection
       shell: >
-        hdbsql -n {{ sap_s4hana_deployment_db_host }} -i {{ sap_s4hana_deployment_hana_instance_nr }}
+        /hana/shared/{{ sap_s4hana_deployment_db_sid }}/hdbclient/hdbsql -n {{ sap_s4hana_deployment_db_host }} -i {{ sap_s4hana_deployment_hana_instance_nr }}
         -u SYSTEM -p {{ sap_s4hana_deployment_master_password }}
         -dSystemDB "SELECT count(*) from sys.users";
       become: yes
