@@ -27,7 +27,7 @@
       become_user: "{{ sap_s4hana_deployment_db_sid | lower }}adm"
       become_method: su
       register: response
-      until: response.stdout is undefined or ('failed' in response.stdout)
+      until: response.stdout is undefined or ('failed' in response.stderr)
       retries: "{{ verify_task_timeout | default(900) }}"
       delay: 1
       failed_when: false
@@ -45,4 +45,4 @@
       fail:
         msg: "connection to db is not available"
       #when: response.status != 200
-      when: ('failed' in response.stdout)
+      when: ('failed' in response.stderr)
