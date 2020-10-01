@@ -20,7 +20,7 @@
 
     - name: exit when no connection
       shell: >
-        /hana/shared/{{ sap_s4hana_deployment_db_sid }}/hdbclient/hdbsql -n {{ sap_s4hana_deployment_db_host }} -i {{ sap_s4hana_deployment_hana_instance_nr }}
+        /usr/sap/{{ sap_s4hana_deployment_db_sid }}/hdbclient/hdbsql -n {{ sap_s4hana_deployment_db_host }} -i {{ sap_s4hana_deployment_hana_instance_nr }}
         -u SYSTEM -p {{ sap_s4hana_deployment_master_password }}
         -dSystemDB "SELECT count(*) from sys.users";
       become: yes
