@@ -22,9 +22,10 @@
       shell: >
         /usr/sap/{{ sap_s4hana_deployment_db_sid }}/hdbclient/hdbsql -n {{ sap_s4hana_deployment_db_host }} -i {{ sap_s4hana_deployment_hana_instance_nr }}
         -u SYSTEM -p {{ sap_s4hana_deployment_master_password }}
-        -dSystemDB "SELECT count(*) from sys.users";
+        -dSystemDB "SELECT count(*) from sys.users"
       become: yes
       become_user: "{{ sap_s4hana_deployment_db_sid | lower }}adm"
+      become_method: su
       register: response
       until: response.stdout is undefined or ('failed' in response.stdout)
       retries: "{{ verify_task_timeout | default(900) }}"
