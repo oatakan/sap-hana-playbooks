@@ -1,0 +1,43 @@
+- name: verify SAP working with HANA backend
+  hosts: "{{ vm_prefix }}*:&*s4_image"
+
+  vars:
+    application_url: http://127.0.0.1:5000
+    verify_task_timeout: 900
+
+  tasks:
+#    - name: exit when no connection
+#      uri:
+#        url: '{{ application_url }}/getall'
+#        return_content: yes
+#        validate_certs: no
+#      become: no
+#      register: response
+#      until: response.content is undefined or response.status != 200
+#      retries: "{{ verify_task_timeout | default(900) }}"
+#      delay: 1
+#      failed_when: false
+
+    - name: exit when no connection
+      shell: >
+        hdbsql -n {{ sap_s4hana_deployment_db_host }} -i {{ sap_s4hana_deployment_hana_instance_nr }}
+        -u {{ sap_s4hana_deployment_db_sid | lower }}adm -p {{ sap_s4hana_deployment_master_password }}
+        "select * from sys.users";
+      become: no
+      register: response
+      until: response.stdout is undefined or ('error' in response.stdout)
+      retries: "{{ verify_task_timeout | default(900) }}"
+      delay: 1
+      failed_when: false
+
+    - name: connection is available to db
+      debug:
+        msg: "connection to db is available"
+      #when: response.status == 200
+      when: ('error' in response.stdout)
+
+    - name: connection is not available to db
+      fail:
+        msg: "connection to db is not available"
+      #when: response.status != 200
+      when: ('error' not in response.stdout)

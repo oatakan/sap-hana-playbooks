@@ -1,0 +1,15 @@
+---
+
+- name: rolling update OS on HANA servers
+  hosts: "{{ vm_prefix }}*:&*hana_image"
+  serial: "{{ job_percentage | default('50') }}%"
+
+  roles:
+    - role: oatakan.rhel_upgrade
+      update_reboot_kernel: yes
+
+
+  post_tasks:
+    - name: reboot anyway in non-rolling update mode
+      reboot:
+      when: (job_percentage == 100) | default(False)
