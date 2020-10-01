@@ -21,7 +21,7 @@
     - debug:
         msg: "{{ check_hana_files.results }}"
   roles:
-#    - redhat_sap.sap_hana_deployment
+    - redhat_sap.sap_hana_deployment
     - redhat_sap.sap_hana_hsr
     - redhat_sap.sap_hana_ha_pacemaker
 
