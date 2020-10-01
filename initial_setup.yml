@@ -8,6 +8,7 @@
       HANA_Image: SAP HANA Server
 
   roles:
+    - redhat_sap.sap_rhsm
     - storage
 
   post_tasks:
