@@ -3,6 +3,8 @@
 - name: rolling update OS on HANA servers
   hosts: "{{ vm_prefix }}*:&*hana_image"
   serial: "{{ job_percentage | default('50') }}%"
+  vars:
+    reboot_timeout: 2400
 
   roles:
     - role: oatakan.rhel_upgrade
@@ -12,4 +14,5 @@
   post_tasks:
     - name: reboot anyway in non-rolling update mode
       reboot:
+        reboot_timeout: "{{ reboot_timeout }}"
       when: (job_percentage == 100) | default(False)
