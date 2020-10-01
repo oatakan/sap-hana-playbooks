@@ -82,6 +82,7 @@
         src: "{{ local_repo_path }}/SAPCAR/{{ sap_install_sapcar_file_name }}"
         dest: "{{ sap_install_sapcar_path }}/{{ sap_install_sapcar_file_name }}"
         remote_src: yes
+        mode: u+rwx,g+rx,o+rx
       when: sap_install_sapcar_path is defined
 
     - name: set grub to default to the old kernel for kernel patching scenario
