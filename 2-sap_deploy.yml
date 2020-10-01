@@ -9,10 +9,11 @@
   become_method: su
   pre_tasks:
     - debug:
-        msg: "hrs_role/alias: {{ sap_hana_hsr_role }} / {{ sap_hana_hsr_alias }}"
+        msg: "hsr_role/alias: {{ sap_hana_hsr_role }} / {{ sap_hana_hsr_alias }}"
     - name: check the files
       stat:
         path: "{{ item }}"
+        get_checksum: no
       register: check_hana_files
       loop:
         - "{{ sap_hana_deployment_sapcar_path }}/{{ sap_hana_deployment_sapcar_file_name }}"
