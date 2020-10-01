@@ -1,0 +1,23 @@
+---
+
+- hosts: "{{ vm_prefix }}*:&*hana_image"
+  become_method: su
+  pre_tasks:
+    - debug:
+        msg: "hsr_role/alias: {{ sap_hana_hsr_role }} / {{ sap_hana_hsr_alias }}"
+    - name: check the files
+      stat:
+        path: "{{ item }}"
+        get_checksum: no
+      register: check_hana_files
+      loop:
+        - "{{ sap_hana_deployment_sapcar_path }}/{{ sap_hana_deployment_sapcar_file_name }}"
+        - "{{ sap_hana_deployment_bundle_path }}/{{ sap_hana_deployment_bundle_sar_file_name }}"
+    - debug:
+        msg: "{{ check_hana_files.results }}"
+  roles:
+    - redhat_sap.sap_rhsm
+    - redhat_sap.sap_hostagent
+    - redhat_sap.sap_hana_deployment
+    - redhat_sap.sap_hana_hsr
+    - redhat_sap.sap_hana_ha_pacemaker
