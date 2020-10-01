@@ -21,12 +21,12 @@
     - name: exit when no connection
       shell: >
         hdbsql -n {{ sap_s4hana_deployment_db_host }} -i {{ sap_s4hana_deployment_hana_instance_nr }}
-        -u {{ sap_s4hana_deployment_db_sid | lower }}adm -p "{{ sap_s4hana_deployment_master_password }}"
-        "select * from sys.users";
+        -u SYSTEM -p {{ sap_s4hana_deployment_master_password }}
+        -dSystemDB "SELECT count(*) from sys.users"
       become: yes
       become_user: "{{ sap_s4hana_deployment_db_sid | lower }}adm"
       register: response
-      until: response.stdout is undefined or ('error' in response.stdout)
+      until: response.stdout is undefined or ('failed' in response.stdout)
       retries: "{{ verify_task_timeout | default(900) }}"
       delay: 1
       failed_when: false
@@ -35,10 +35,10 @@
       debug:
         msg: "connection to db is available"
       #when: response.status == 200
-      when: ('error' in response.stdout)
+      when: ('1 row selected' in response.stdout)
 
     - name: connection is not available to db
       fail:
         msg: "connection to db is not available"
       #when: response.status != 200
-      when: ('error' not in response.stdout)
+      when: ('failed' in response.stdout)
