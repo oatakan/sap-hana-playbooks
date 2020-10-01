@@ -73,16 +73,16 @@
   post_tasks:
     - name: ensure installation directories exists
       file:
-        path: "{{ sap_hana_deployment_sapcar_path | default(sap_s4hana_deployment_sapcar_path) }}"
+        path: "{{ sap_install_sapcar_path }}"
         state: directory
-      when: sap_hana_deployment_sapcar_path is defined or sap_s4hana_deployment_sapcar_path is defined
+      when: sap_install_sapcar_path is defined
 
     - name: ensure SAPCAR is copied to target directories
       copy:
         src: "{{ local_repo_path }}/SAPCAR/{{ sap_hana_deployment_sapcar_file_name }}"
-        dest: "{{ sap_hana_deployment_sapcar_path | default(sap_s4hana_deployment_sapcar_path) }}/{{ sap_hana_deployment_sapcar_file_name }}"
+        dest: "{{ sap_install_sapcar_path }}/{{ sap_hana_deployment_sapcar_file_name }}"
         remote_src: yes
-      when: sap_hana_deployment_sapcar_path is defined or sap_s4hana_deployment_sapcar_path is defined
+      when: sap_install_sapcar_path is defined
 
     - name: set grub to default to the old kernel for kernel patching scenario
       shell: /usr/sbin/grubby --set-default-index=1

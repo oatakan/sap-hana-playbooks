@@ -63,6 +63,6 @@ storage_pools:
         mount_point: "/usr/sap"
         state: present
       - name: install
-        size: "28 GiB"
+        size: "26 GiB"
         mount_point: "/install"
         state: present

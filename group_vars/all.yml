@@ -9,6 +9,8 @@ sap_rhsm_pools_ids:
 
 sap_password: "mysecretPassw0rd!"
 
+sap_install_sapcar_path: "/install/SAPCAR"
+
 software_repo_nfs_server: localhost
 software_repo_path: /var/lib/exports/software
 local_repo_path: /software
