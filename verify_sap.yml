@@ -22,7 +22,7 @@
       shell: >
         hdbsql -n {{ sap_s4hana_deployment_db_host }} -i {{ sap_s4hana_deployment_hana_instance_nr }}
         -u SYSTEM -p {{ sap_s4hana_deployment_master_password }}
-        -dSystemDB "SELECT count(*) from sys.users"
+        -dSystemDB "SELECT count(*) from sys.users";
       become: yes
       become_user: "{{ sap_s4hana_deployment_db_sid | lower }}adm"
       register: response
@@ -31,11 +31,14 @@
       delay: 1
       failed_when: false
 
+    - debug:
+        msg: "{{ response.stdout }}"
+
     - name: connection is available to db
       debug:
         msg: "connection to db is available"
       #when: response.status == 200
-      when: ('1 row selected' in response.stdout)
+      when: ('selected' in response.stdout)
 
     - name: connection is not available to db
       fail:
