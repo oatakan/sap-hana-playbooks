@@ -79,8 +79,8 @@
 
     - name: ensure SAPCAR is copied to target directories
       copy:
-        src: "{{ local_repo_path }}/SAPCAR/{{ sap_hana_deployment_sapcar_file_name }}"
-        dest: "{{ sap_install_sapcar_path }}/{{ sap_hana_deployment_sapcar_file_name }}"
+        src: "{{ local_repo_path }}/SAPCAR/{{ sap_install_sapcar_file_name }}"
+        dest: "{{ sap_install_sapcar_path }}/{{ sap_install_sapcar_file_name }}"
         remote_src: yes
       when: sap_install_sapcar_path is defined
 
