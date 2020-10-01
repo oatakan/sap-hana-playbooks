@@ -1,0 +1,21 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  vars:
+    organization: Shadow Man
+    lifecycle_environment: Production
+    current_lifecycle_environment: Development
+    content_view: RHEL SAP HANA Base
+
+  tasks:
+  - name: Promote Content View
+    theforeman.foreman.content_view_version:
+      server_url: "{{ lookup('env', 'FOREMAN_SERVER') }}"
+      username: "{{ lookup('env', 'FOREMAN_USER') }}"
+      password: "{{ lookup('env', 'FOREMAN_PASSWORD') }}"
+      validate_certs: false
+      content_view: "{{ content_view }}"
+      organization: "{{ organization }}"
+      lifecycle_environments: "{{ lifecycle_environment }}"
+      current_lifecycle_environment: "{{ current_lifecycle_environment }}"

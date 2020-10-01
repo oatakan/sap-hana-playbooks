@@ -21,9 +21,10 @@
     - name: exit when no connection
       shell: >
         hdbsql -n {{ sap_s4hana_deployment_db_host }} -i {{ sap_s4hana_deployment_hana_instance_nr }}
-        -u {{ sap_s4hana_deployment_db_sid | lower }}adm -p {{ sap_s4hana_deployment_master_password }}
+        -u {{ sap_s4hana_deployment_db_sid | lower }}adm -p "{{ sap_s4hana_deployment_master_password }}"
         "select * from sys.users";
-      become: no
+      become: yes
+      become_user: "{{ sap_s4hana_deployment_db_sid | lower }}adm"
       register: response
       until: response.stdout is undefined or ('error' in response.stdout)
       retries: "{{ verify_task_timeout | default(900) }}"
