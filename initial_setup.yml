@@ -7,11 +7,7 @@
       S4_Image: SAP S4 Server
       HANA_Image: SAP HANA Server
 
-  roles:
-    - redhat_sap.sap_rhsm
-    - storage
-
-  post_tasks:
+  pre_tasks:
     - name: Subscribe to our Satellite using our activation key
       redhat_subscription:
         state: present
@@ -70,6 +66,11 @@
         opts: rw,_netdev
         state: mounted
 
+  roles:
+#    - redhat_sap.sap_rhsm
+    - storage
+
+  post_tasks:
     - name: ensure installation directories exists
       file:
         path: "{{ sap_hana_deployment_sapcar_path | default(sap_s4hana_deployment_sapcar_path) }}"
