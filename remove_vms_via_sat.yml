@@ -4,21 +4,31 @@
 
   tasks:
 
-    - name: delete vm
-      uri:
-        url: "{{ lookup('env', 'FOREMAN_SERVER') }}/api/v2/hosts/{{ foreman.id | default(sat_host_id) }}"
-        user: "{{ lookup('env', 'FOREMAN_USER') }}"
-        password: "{{ lookup('env', 'FOREMAN_PASSWORD') }}"
-        validate_certs: false
-        force_basic_auth: true
-        timeout: 14400
-        method: DELETE
-        body_format: json
-        body:
-          host:
-            id: "{{ foreman.id }}"
-            location_id: "{{ location_id | default('2') }}"
-            organization_id: "{{ organization_id | default('1') }}"
-      register: deploy_status
-      when: foreman.id | default(sat_host_id) | default(None) is defined
-      delegate_to: localhost
+    - block:
+        - name: unregister redhat-insights
+          command: redhat-access-insights --unregister
+          register: unregister_insights
+          failed_when: false
+
+        - debug:
+            msg: "{{ unregister_insights.stdout | default('not registered') }}"
+
+      always:
+        - name: delete vm
+          uri:
+            url: "{{ lookup('env', 'FOREMAN_SERVER') }}/api/v2/hosts/{{ foreman.id | default(sat_host_id) }}"
+            user: "{{ lookup('env', 'FOREMAN_USER') }}"
+            password: "{{ lookup('env', 'FOREMAN_PASSWORD') }}"
+            validate_certs: false
+            force_basic_auth: true
+            timeout: 14400
+            method: DELETE
+            body_format: json
+            body:
+              host:
+                id: "{{ foreman.id }}"
+                location_id: "{{ location_id | default('2') }}"
+                organization_id: "{{ organization_id | default('1') }}"
+          register: deploy_status
+          when: foreman.id | default(sat_host_id) | default(None) is defined
+          delegate_to: localhost
