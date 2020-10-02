@@ -31,7 +31,7 @@
       shell: >
         /usr/sap/{{ sap_s4hana_deployment_db_sid }}/hdbclient/hdbsql -n {{ sap_s4hana_deployment_db_host }} -i {{ sap_s4hana_deployment_hana_instance_nr }}
         -u SYSTEM -p {{ sap_s4hana_deployment_master_password }}
-        "ALTER SYSTEM ALTER CONFIGURATION ('global.ini'.'SYSTEM') SET ('persistence'.'log_mode') = 'overwrite' WITH RECONFIGURE";
+        "ALTER SYSTEM ALTER CONFIGURATION ('global.ini', 'SYSTEM') SET ('persistence', 'log_mode') = 'overwrite' WITH RECONFIGURE";
       become: yes
       become_user: "{{ sap_s4hana_deployment_db_sid | lower }}adm"
       become_method: su
