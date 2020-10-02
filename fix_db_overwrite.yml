@@ -1,17 +1,19 @@
 ---
 
-- hosts: "{{ vm_prefix }}*:&*s4_image"
+- hosts: "{{ vm_prefix }}*:&*hana_image"
   tasks:
     - name: prevent transaction log to fill up disk
       shell: >
-        /usr/sap/{{ sap_s4hana_deployment_db_sid }}/hdbclient/hdbsql -n {{ sap_s4hana_deployment_db_host }} -i {{ sap_s4hana_deployment_hana_instance_nr }}
-        -u SYSTEM -p {{ sap_s4hana_deployment_master_password }}
+        /usr/sap/{{ sap_hana_deployment_hana_sid }}/HDB{{ sap_hana_deployment_hana_instance_number }}/exe/hdbsql
+        -n {{ ansible_hostname }} -i {{ sap_hana_deployment_hana_instance_number }}
+        -u SYSTEM -p {{ sap_hana_deployment_hana_db_system_password }}
         "ALTER SYSTEM ALTER CONFIGURATION ('global.ini', 'SYSTEM') SET ('persistence', 'log_mode') = 'overwrite' WITH RECONFIGURE";
       become: yes
-      become_user: "{{ sap_s4hana_deployment_db_sid | lower }}adm"
+      become_user: "{{ sap_hana_deployment_hana_sid | lower }}adm"
       become_method: su
       register: db_overwrite_cmd
       failed_when: false
+      when: sap_hana_hsr_role == 'primary'
 
     - debug:
         msg: "{{ db_overwrite_cmd }}"
