@@ -1,7 +1,7 @@
 ---
 
 - hosts: "{{ vm_prefix }}*:&*s4_image"
-  pre_tasks:
+  tasks:
     - name: prevent transaction log to fill up disk
       shell: >
         /usr/sap/{{ sap_s4hana_deployment_db_sid }}/hdbclient/hdbsql -n {{ sap_s4hana_deployment_db_host }} -i {{ sap_s4hana_deployment_hana_instance_nr }}
@@ -15,7 +15,3 @@
 
     - debug:
         msg: "{{ db_overwrite_cmd }}"
-  roles:
-    - redhat_sap.sap_rhsm
-    - redhat_sap.sap_hostagent
-    - redhat_sap.sap_s4hana_deployment
