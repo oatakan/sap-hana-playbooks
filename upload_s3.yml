@@ -16,5 +16,9 @@
         aws_secret_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
         region: "{{ ec2_region }}"
         bucket: "{{ s3_bucket }}"
-        file_root: "{{ sap_s4hana_deployment_swpm_path }}"
+        file_root: "{{ item }}"
         permission: private
+      loop:
+        - /software/HANA_installation
+        - /software/S4HANA_installation
+        - /install/SAPCAR
