@@ -12,6 +12,8 @@
 
     - name: sync files
       s3_sync:
+        aws_access_key: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
+        aws_secret_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
         region: "{{ ec2_region }}"
         bucket: "{{ s3_bucket }}"
         file_root: "{{ sap_s4hana_deployment_swpm_path }}"
