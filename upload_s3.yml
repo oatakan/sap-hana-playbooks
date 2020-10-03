@@ -17,6 +17,7 @@
         region: "{{ ec2_region }}"
         bucket: "{{ s3_bucket }}"
         file_root: "{{ item }}"
+        key_prefix: "{{ item | basename }}"
         permission: private
       loop:
         - /software/HANA_installation
