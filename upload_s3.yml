@@ -12,6 +12,7 @@
 
     - name: sync files
       s3_sync:
+        region: "{{ ec2_region }}"
         bucket: "{{ s3_bucket }}"
         file_root: "{{ sap_s4hana_deployment_swpm_path }}"
         permission: private
