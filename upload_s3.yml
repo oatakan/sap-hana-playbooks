@@ -1,0 +1,17 @@
+- hosts: "{{ vm_prefix }}*:&*s4_image"
+  gather_facts: no
+  vars:
+    s3_bucket: rhsap-demo
+  tasks:
+    - name: make sure required python libraries installed
+      pip:
+        name:
+          - boto
+          - boto3
+          - botocore
+
+    - name: sync files
+      s3_sync:
+        bucket: "{{ s3_bucket }}"
+        file_root: "{{ sap_s4hana_deployment_swpm_path }}"
+        permission: private
