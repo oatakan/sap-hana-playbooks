@@ -22,4 +22,5 @@
       loop:
         - /software/HANA_installation
         - /software/S4HANA_installation
+        - /software/SAPHOSTAGENT
         - /install/SAPCAR
