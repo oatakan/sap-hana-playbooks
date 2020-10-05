@@ -33,17 +33,17 @@ storage_pools:
       - sdb
     volumes:
       - name: sap
-        size: "30 GiB"
+        size: "96 GiB"
         mount_point: "/usr/sap"
         state: present
       - name: sapmnt
-        size: "20 GiB"
+        size: "96 GiB"
         mount_point: "/usr/sapmnt"
         state: present
       - name: swap
         size: "20 GiB"
         state: present
       - name: install
-        size: "28 GiB"
+        size: "10 GiB"
         mount_point: "/install"
         state: present

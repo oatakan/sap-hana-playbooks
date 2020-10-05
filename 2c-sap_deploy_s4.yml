@@ -1,8 +1,7 @@
 ---
 
 - hosts: "{{ vm_prefix }}*:&*s4_image"
-  become_method: su
   roles:
     - redhat_sap.sap_rhsm
     - redhat_sap.sap_hostagent
-    - redhat_sap.sap_s4hana_deployment
+    - sap_s4hana_deployment
