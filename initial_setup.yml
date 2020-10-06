@@ -8,16 +8,21 @@
       HANA_Image: SAP HANA Server
 
   pre_tasks:
-    - name: Subscribe to our Satellite using our activation key
-      redhat_subscription:
-        state: present
-        activationkey: "{{ activation_keys[foreman.hostgroup_name] | default('SAP HANA Server') }}"
-        org_id: Shadow_Man
-        auto_attach: true
-      register: subscribe_to_satelite
-      until: subscribe_to_satelite is success
-      delay: 3
-      retries: 10
+    - block:
+        - name: Subscribe to our Satellite using our activation key
+          redhat_subscription:
+            state: present
+            activationkey: "{{ activation_keys[foreman.hostgroup_name] | default('SAP HANA Server') }}"
+            org_id: Shadow_Man
+            auto_attach: true
+          register: subscribe_to_satelite
+          until: subscribe_to_satelite is success
+          delay: 3
+          retries: 10
+
+      rescue:
+        - debug:
+            msg: "continue"
 
 
 #    - name: Subscribe to our Satellite using our activation key
