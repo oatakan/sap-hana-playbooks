@@ -8,13 +8,17 @@
       HANA_Image: SAP HANA Server
 
   pre_tasks:
-    - name: Subscribe to our Satellite using our activation key
-      redhat_subscription:
-        state: present
-        activationkey: "{{ activation_keys[foreman.hostgroup_name] | default('SAP HANA Server') }}"
-        org_id: Shadow_Man
-        auto_attach: true
-      failed_when: false
+    - block:
+        - name: Subscribe to our Satellite using our activation key
+          redhat_subscription:
+            state: present
+            activationkey: "{{ activation_keys[foreman.hostgroup_name] | default('SAP HANA Server') }}"
+            org_id: Shadow_Man
+            auto_attach: true
+      rescue:
+        - name: attach susbscription
+          command: subscription-manager register --org Shadow_Man --activationkey "{{ activation_keys[foreman.hostgroup_name] | default('SAP HANA Server') }}"
+          failed_when: false
 
     # this shouldn't be needed normally but auto-attach doesn't seem to always work
     - name: attach susbscription
