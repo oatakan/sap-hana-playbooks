@@ -9,6 +9,7 @@
           command: redhat-access-insights --unregister
           register: unregister_insights
           failed_when: false
+          ignore_unreachable: yes
 
         - debug:
             msg: "{{ unregister_insights.stdout | default('not registered') }}"
