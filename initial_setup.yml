@@ -15,6 +15,7 @@
             activationkey: "{{ activation_keys[foreman.hostgroup_name] | default('SAP HANA Server') }}"
             org_id: Shadow_Man
             auto_attach: true
+            force_register: yes
           register: subscribe_to_satelite
           until: subscribe_to_satelite is success
           delay: 3
