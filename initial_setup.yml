@@ -1,5 +1,27 @@
 ---
 
+- name: Subscription
+  hosts: "{{ vm_prefix }}*"
+  serial: 1
+  vars:
+    activation_keys:
+      S4_Image: SAP S4 Server
+      HANA_Image: SAP HANA Server
+
+  tasks:
+    - name: Subscribe to our Satellite using our activation key
+      redhat_subscription:
+        state: present
+        activationkey: "{{ activation_keys[foreman.hostgroup_name] | default('SAP HANA Server') }}"
+        org_id: Shadow_Man
+        auto_attach: true
+      register: sat_subscribe
+      until: sat_subscribe is success
+#      failed_when: ('500 - Internal Server Error') in sat_subscribe.msg or ('404 - Not Found') in sat_subscribe.msg
+#      until: sat_subscribe is success or ('500 - Internal Server Error') not in sat_subscribe.msg or ('404 - Not Found') not in sat_subscribe.msg
+      delay: 10
+      retries: 10
+
 - name: Set up VM
   hosts: "{{ vm_prefix }}*"
   vars:
@@ -8,17 +30,6 @@
       HANA_Image: SAP HANA Server
 
   pre_tasks:
-    - name: Subscribe to our Satellite using our activation key
-      redhat_subscription:
-        state: present
-        activationkey: "{{ activation_keys[foreman.hostgroup_name] | default('SAP HANA Server') }}"
-        org_id: Shadow_Man
-        auto_attach: true
-      register: sat_subscribe
-      failed_when: ('500 - Internal Server Error') in sat_subscribe.msg or ('404 - Not Found') in sat_subscribe.msg
-      until: sat_subscribe is success or ('500 - Internal Server Error') not in sat_subscribe.msg or ('404 - Not Found') not in sat_subscribe.msg
-      delay: 10
-      retries: 10
 
 #    # this shouldn't be needed normally but auto-attach doesn't seem to always work
 #    - name: attach susbscription
