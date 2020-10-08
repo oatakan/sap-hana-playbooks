@@ -17,23 +17,21 @@
         force_register: true
       register: sat_subscribe
       until: sat_subscribe is success
-#      failed_when: ('500 - Internal Server Error') in sat_subscribe.msg or ('404 - Not Found') in sat_subscribe.msg
-#      until: sat_subscribe is success or ('500 - Internal Server Error') not in sat_subscribe.msg or ('404 - Not Found') not in sat_subscribe.msg
       delay: 10
       retries: 10
 
-#    # this shouldn't be needed normally but auto-attach doesn't seem to always work
-#    - name: attach susbscription
-#      command: subscription-manager attach
-#      failed_when: false
-#
-#    - name: unset role and usage
-#      command: "{{ item }}"
-#      failed_when: false
-#      loop:
-#        - syspurpose unset role
-#        - syspurpose unset usage
-#
+    # this shouldn't be needed normally but auto-attach doesn't seem to always work
+    - name: attach susbscription
+      command: subscription-manager attach
+      failed_when: false
+
+    - name: unset role and usage
+      command: "{{ item }}"
+      failed_when: false
+      loop:
+        - syspurpose unset role
+        - syspurpose unset usage
+
     - name: check subscription status
       command: subscription-manager status
       register: sat_sub_status
