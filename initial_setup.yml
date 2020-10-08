@@ -14,15 +14,12 @@
         activationkey: "{{ activation_keys[foreman.hostgroup_name] | default('SAP HANA Server') }}"
         org_id: Shadow_Man
         auto_attach: true
+        force_register: true
       register: sat_subscribe
       failed_when: ('500 - Internal Server Error') in sat_subscribe.msg or ('404 - Not Found') in sat_subscribe.msg
       until: sat_subscribe is success or ('500 - Internal Server Error') not in sat_subscribe.msg or ('404 - Not Found') not in sat_subscribe.msg
       delay: 3
       retries: 10
-
-    - name: attach susbscription
-      command: subscription-manager register --org Shadow_Man --activationkey "{{ activation_keys[foreman.hostgroup_name] | default('SAP HANA Server') }}"
-      failed_when: false
 
     # this shouldn't be needed normally but auto-attach doesn't seem to always work
     - name: attach susbscription
