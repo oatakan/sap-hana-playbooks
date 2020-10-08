@@ -14,6 +14,10 @@
         - debug:
             msg: "{{ unregister_insights.stdout | default('not registered') }}"
 
+        - name: unregister from satellite
+          redhat_subscription:
+            state: absent
+
       always:
         - name: delete vm
           uri:
