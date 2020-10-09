@@ -16,6 +16,7 @@
         activationkey: "SAP S4 Server"
         org_id: Shadow_Man
         auto_attach: true
+      failed_when: false
 
   roles:
     - redhat_sap.sap_rhsm
