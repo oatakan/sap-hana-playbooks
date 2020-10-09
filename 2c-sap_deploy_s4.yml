@@ -7,6 +7,14 @@
       redhat_subscription:
         state: absent
 
+    - name: subscription-manager unregister
+      command: subscription-manager unregister
+      failed_when: false
+
+    - name: subscription-manager clean
+      command: subscription-manager clean
+      failed_when: false
+
     - pause:
         seconds: 5
 
