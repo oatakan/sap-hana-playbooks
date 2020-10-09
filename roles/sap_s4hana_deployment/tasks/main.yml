@@ -41,6 +41,13 @@
       SAPINST_SKIP_DIALOGS=true SAPINST_START_GUISERVER=false
   failed_when: false
 
+- name: Install SAP S4HANA with background process (monitor on the system)
+  shell: >-
+    cd {{ sapinst_path }}; nohup ./sapinst SAPINST_INPUT_PARAMETERS_URL={{ tmpdir.path }}/inifile.params \
+    SAPINST_EXECUTE_PRODUCT_ID={{ sap_s4hana_deployment_product_id }} \
+    SAPINST_SKIP_DIALOGS=true SAPINST_START_GUISERVER=false
+  failed_when: false
+
 #- name: Install SAP S4HANA
 #  shell: >-
 #    ./sapinst SAPINST_INPUT_PARAMETERS_URL={{ tmpdir.path }}/inifile.params \
