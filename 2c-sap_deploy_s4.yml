@@ -1,6 +1,7 @@
 ---
 
 - hosts: "{{ vm_prefix }}*:&*s4_image"
+  # This is only temporarily needed until registration issues are resolved
   pre_tasks:
     - name: unregister from satellite
       redhat_subscription:

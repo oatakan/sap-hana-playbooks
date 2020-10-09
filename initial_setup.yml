@@ -31,17 +31,17 @@
 
   pre_tasks:
 
-#    # this shouldn't be needed normally but auto-attach doesn't seem to always work
-#    - name: attach susbscription
-#      command: subscription-manager attach
-#      failed_when: false
-#
-#    - name: unset role and usage
-#      command: "{{ item }}"
-#      failed_when: false
-#      loop:
-#        - syspurpose unset role
-#        - syspurpose unset usage
+    # this shouldn't be needed normally but auto-attach doesn't seem to always work
+    - name: attach susbscription
+      command: subscription-manager attach
+      failed_when: false
+
+    - name: unset role and usage
+      command: "{{ item }}"
+      failed_when: false
+      loop:
+        - syspurpose unset role
+        - syspurpose unset usage
 
     - name: check subscription status
       command: subscription-manager status
