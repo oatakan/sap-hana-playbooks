@@ -1,6 +1,21 @@
 ---
 
 - hosts: "{{ vm_prefix }}*:&*s4_image"
+  pre_tasks:
+    - name: unregister from satellite
+      redhat_subscription:
+        state: absent
+
+    - pause:
+        seconds: 5
+
+    - name: Subscribe to our Satellite using our activation key
+      redhat_subscription:
+        state: present
+        activationkey: "SAP S4 Server"
+        org_id: Shadow_Man
+        auto_attach: true
+
   roles:
     - redhat_sap.sap_rhsm
     - redhat_sap.sap_hostagent
