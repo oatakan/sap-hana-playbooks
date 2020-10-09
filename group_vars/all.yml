@@ -8,6 +8,7 @@ sap_rhsm_pools_ids:
   - "mypoolidinfo"
 
 sap_hana_ha_pacemaker_vip: "172.16.4.250"
+sap_db_host: "hdb1vip"
 
 sap_password: "mysecretPassw0rd!"
 

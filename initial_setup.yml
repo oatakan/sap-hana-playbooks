@@ -74,11 +74,11 @@
     - name: add vip to hosts file for db
       lineinfile:
         dest: /etc/hosts
-        regexp: '.*{{ sap_s4hana_deployment_db_host }}$'
-        line: "{{ sap_hana_ha_pacemaker_vip }} {{ sap_s4hana_deployment_db_host }} {{ sap_s4hana_deployment_db_host }}.{{ foreman.domain_name }}"
+        regexp: '.*{{ sap_db_host }}$'
+        line: "{{ sap_hana_ha_pacemaker_vip }} {{ sap_db_host }} {{ sap_db_host }}.{{ foreman.domain_name }}"
         state: present
       when:
-        - sap_s4hana_deployment_db_host is defined
+        - sap_db_host is defined
         - sap_hana_ha_pacemaker_vip is defined
 
     - name: ensure software repo directory exists
