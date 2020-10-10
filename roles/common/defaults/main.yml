@@ -1,0 +1,5 @@
+---
+
+local_repo_path: /software
+
+swap_swappiness: "60"

@@ -1,0 +1,80 @@
+---
+
+# this should be a temporary fix until template comes up with the correct hostname
+- block:
+    - name: ensure hostname is set
+      hostname:
+        name: "{{ inventory_hostname_short }}"
+
+    - name: gather new facts and hostname
+      setup:
+  when: ansible_hostname not in inventory_hostname
+
+- name: build hosts file
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '.*{{ item }}$'
+    line: "{{ hostvars[item].ansible_default_ipv4.address }} {{ item }} {{ hostvars[item].ansible_hostname }}"
+    state: present
+  when: hostvars[item].ansible_default_ipv4.address is defined
+  loop: "{{ play_hosts }}"
+
+- name: add vip to hosts file for db
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '.*{{ sap_db_host }}$'
+    line: "{{ sap_hana_ha_pacemaker_vip }} {{ sap_db_host }}.{{ foreman.domain_name }} {{ sap_db_host }}"
+    state: present
+  when:
+    - sap_db_host is defined
+    - sap_hana_ha_pacemaker_vip is defined
+
+- name: ensure software repo directory exists
+  file:
+    path: "{{ local_repo_path }}"
+    state: directory
+
+- name: ensure prereq packages are present
+  package:
+    name:
+      - compat-sap-c++-9
+      - nfs-utils
+      - nfs4-acl-tools
+
+- name: ensure software repo is mounted
+  mount:
+    path: "{{ local_repo_path }}"
+    src: "{{ software_repo_nfs_server }}:/{{ software_repo_path }}"
+    fstype: nfs
+    opts: rw,_netdev
+    state: mounted
+
+- include_role:
+    name: storage
+
+- include_tasks: swap.yml
+  when:
+    - storage_pools is defined
+    - storage_pools | length > 0
+    - storage_pools[0].name is defined
+    - ('swap' in (storage_pools[0].volumes | map(attribute='name') | list))
+
+- name: ensure installation directories exists
+  file:
+    path: "{{ sap_install_sapcar_path }}"
+    state: directory
+  when: sap_install_sapcar_path is defined
+
+- name: ensure SAPCAR is copied to target directories
+  copy:
+    src: "{{ local_repo_path }}/SAPCAR/{{ sap_install_sapcar_file_name }}"
+    dest: "{{ sap_install_sapcar_path }}/{{ sap_install_sapcar_file_name }}"
+    remote_src: yes
+    mode: u+rwx,g+rx,o+rx
+  when: sap_install_sapcar_path is defined
+
+- name: set grub to default to the old kernel for kernel patching scenario
+  shell: /usr/sbin/grubby --set-default-index=1
+
+- name: Reboot the machine
+  reboot:
