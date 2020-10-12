@@ -17,6 +17,8 @@
         - name: unregister from satellite
           redhat_subscription:
             state: absent
+          failed_when: false
+          ignore_unreachable: yes
 
       always:
         - name: delete vm
