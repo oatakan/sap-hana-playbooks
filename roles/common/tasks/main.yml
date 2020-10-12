@@ -19,15 +19,15 @@
   when: hostvars[item].ansible_default_ipv4.address is defined
   loop: "{{ play_hosts }}"
 
-- name: add vip to hosts file for db
-  lineinfile:
-    dest: /etc/hosts
-    regexp: '.*{{ sap_s4hana_deployment_db_host }}$'
-    line: "{{ sap_hana_ha_pacemaker_vip }} {{ sap_s4hana_deployment_db_host }}.{{ foreman.domain_name }} {{ sap_s4hana_deployment_db_host }}"
-    state: present
-  when:
-    - sap_s4hana_deployment_db_host is defined
-    - sap_hana_ha_pacemaker_vip is defined
+#- name: add vip to hosts file for db
+#  lineinfile:
+#    dest: /etc/hosts
+#    regexp: '.*{{ sap_db_host }}$'
+#    line: "{{ sap_hana_ha_pacemaker_vip }} {{ sap_db_host }}.{{ foreman.domain_name }} {{ sap_db_host }}"
+#    state: present
+#  when:
+#    - sap_db_host is defined
+#    - sap_hana_ha_pacemaker_vip is defined
 
 - name: ensure software repo directory exists
   file:

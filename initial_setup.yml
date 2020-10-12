@@ -45,7 +45,6 @@
       HANA_Image: SAP HANA Server
 
   pre_tasks:
-
     # this shouldn't be needed normally but auto-attach doesn't seem to always work
     - name: attach susbscription
       command: subscription-manager attach
