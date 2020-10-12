@@ -57,13 +57,15 @@
           host:
             name: "{{ vm.name }}"
             managed: "true"
-            build: "true"
+            build: "false"
             hostgroup_id: "{{ vm.hostgroup_id }}"
             image_id: "{{ image_id | default('10') }}"
             operatingsystem_id: "{{ operatingsystem_id | default('2') }}"
             provision_method: "{{ provision_method | default('image') }}"
             location_id: "{{ location_id | default('2') }}"
             organization_id: "{{ organization_id | default('1') }}"
+            ptable_id: "173"
+            model_id: "2"
             compute_attributes:
               start: '1'
       register: deploy_status

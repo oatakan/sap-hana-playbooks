@@ -9,6 +9,10 @@
       HANA_Image: SAP HANA Server
 
   tasks:
+    # temporarily to check on cloud-init
+    - pause:
+        seconds: 240
+
     - name: unregister from satellite
       redhat_subscription:
         state: absent
