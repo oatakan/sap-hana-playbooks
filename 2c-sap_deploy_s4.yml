@@ -1,5 +1,20 @@
 ---
 
+- hosts: "{{ vm_prefix }}*:&*hana_image"
+  tasks:
+    - debug:
+        msg: "hsr_role/alias: {{ sap_hana_hsr_role }} / {{ sap_hana_hsr_alias }}"
+
+    - name: set primary hana server ip
+      add_host:
+        name: hana_primary
+        ip_address: "{{ ansible_ip_addresses[0] | default(ansible_host) | default(ansible_ssh_host) }}"
+      when: sap_hana_hsr_role == 'primary'
+
+    - debug:
+        var: hostvars['hana_primary']['ip_address']
+      when: sap_hana_hsr_role == 'primary'
+
 - hosts: "{{ vm_prefix }}*:&*s4_image"
   # This is only temporarily needed until registration issues are resolved
   pre_tasks:
@@ -26,7 +41,59 @@
         auto_attach: true
       failed_when: false
 
+    - name: add temporary vip to hosts file for primary db
+      lineinfile:
+        dest: /etc/hosts
+        regexp: '.*{{ sap_db_host }}$'
+        line: "{{ hostvars['hana_primary']['ip_address'] }} {{ sap_db_host }}.{{ foreman.domain_name }} {{ sap_db_host }}"
+        state: present
+      when: sap_db_host is defined
+
   roles:
     - redhat_sap.sap_rhsm
     - redhat_sap.sap_hostagent
     - sap_s4hana_deployment
+
+- hosts: "{{ vm_prefix }}*:&*hana_image"
+  become_method: su
+  pre_tasks:
+    - debug:
+        msg: "hsr_role/alias: {{ sap_hana_hsr_role }} / {{ sap_hana_hsr_alias }}"
+
+    # This is only temporarily needed until registration issues are resolved
+    - name: unregister from satellite
+      redhat_subscription:
+        state: absent
+
+    - name: subscription-manager unregister
+      command: subscription-manager unregister
+      failed_when: false
+
+    - name: subscription-manager clean
+      command: subscription-manager clean
+      failed_when: false
+
+    - pause:
+        seconds: 5
+
+    - name: Subscribe to our Satellite using our activation key
+      redhat_subscription:
+        state: present
+        activationkey: "SAP HANA Server"
+        org_id: Shadow_Man
+        auto_attach: true
+      failed_when: false
+  roles:
+    - redhat_sap.sap_hana_ha_pacemaker
+
+- hosts: "{{ vm_prefix }}*:&*s4_image"
+  tasks:
+    - name: add real vip to hosts file for db
+      lineinfile:
+        dest: /etc/hosts
+        regexp: '.*{{ sap_db_host }}$'
+        line: "{{ sap_hana_ha_pacemaker_vip }} {{ sap_db_host }}.{{ foreman.domain_name }} {{ sap_db_host }}"
+        state: present
+      when:
+        - sap_db_host is defined
+        - sap_hana_ha_pacemaker_vip is defined
