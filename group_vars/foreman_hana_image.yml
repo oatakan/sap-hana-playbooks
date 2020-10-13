@@ -47,7 +47,7 @@ storage_pools:
       - sdb
     volumes:
       - name: data
-        size: "138 GiB"
+        size: "124 GiB"
         mount_point: "/hana/data"
         state: present
       - name: log
@@ -55,7 +55,7 @@ storage_pools:
         mount_point: "/hana/log"
         state: present
       - name: shared
-        size: "138 GiB"
+        size: "124 GiB"
         mount_point: "/hana/shared"
         state: present
       - name: sap
@@ -65,4 +65,7 @@ storage_pools:
       - name: install
         size: "10 GiB"
         mount_point: "/install"
+        state: present
+      - name: swap
+        size: "30 GiB"
         state: present
