@@ -18,10 +18,10 @@
       set_fact:
         nodes: "{{ [ {'name': vm_prefix + '%02d'|format(1), 'hostgroup_name': hostgroups['s4'].name, 'hostgroup_id': hostgroups['s4'].id} ] }}"
 
-    - name: generate hana nodes
-      set_fact:
-        nodes: "{{ nodes|default([]) + [ {'name': vm_prefix + '%02d'|format(1+(item|int)), 'hostgroup_name': hostgroups['hana'].name, 'hostgroup_id': hostgroups['hana'].id} ] }}"
-      loop: "{{ range(1, 2 + 1, 1)|list }}"
+#    - name: generate hana nodes
+#      set_fact:
+#        nodes: "{{ nodes|default([]) + [ {'name': vm_prefix + '%02d'|format(1+(item|int)), 'hostgroup_name': hostgroups['hana'].name, 'hostgroup_id': hostgroups['hana'].id} ] }}"
+#      loop: "{{ range(1, 2 + 1, 1)|list }}"
 
     - debug:
         msg: "{{ nodes }}"
