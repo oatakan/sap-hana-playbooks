@@ -4,6 +4,7 @@
   gather_facts: false
   vars:
     domain_name: example.com
+    num_of_vms: 3
 
   tasks:
     - block:
@@ -23,7 +24,7 @@
           failed_when: result.ovirt_vms | length == 0
           retries: 60
           delay: 10
-          loop: "{{ range(1, 3 + 1, 1)|list }}"
+          loop: "{{ range(1, num_of_vms + 1, 1)|list }}"
           loop_control:
             loop_var: vm
 
