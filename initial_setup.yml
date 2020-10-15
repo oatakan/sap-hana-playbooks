@@ -1,15 +1,14 @@
 ---
 
-- name: Subscription
+- name: Set up VM
   hosts: "{{ vm_prefix }}*"
-  serial: 1
   vars:
     activation_keys:
       S4_Image: SAP S4 Server
       HANA_Image: SAP HANA Server
 
-  tasks:
-    # this should be a temporary fix until template comes up with the correct hostname
+  pre_tasks:
+
     - block:
         - name: ensure hostname is set
           hostname:
@@ -19,46 +18,12 @@
           setup:
       when: ansible_hostname not in inventory_hostname
 
-    - name: unregister from satellite
-      redhat_subscription:
-        state: absent
-
-    - name: subscription-manager unregister
-      command: subscription-manager unregister
-      failed_when: false
-
-    - name: subscription-manager clean
-      command: subscription-manager clean
-      failed_when: false
-
-    - pause:
-        seconds: 5
-
     - name: Subscribe to our Satellite using our activation key
       redhat_subscription:
         state: present
         activationkey: "{{ activation_keys[foreman.hostgroup_name] | default('SAP HANA Server') }}"
         org_id: Shadow_Man
         auto_attach: true
-      register: sat_subscribe
-      until: sat_subscribe is success
-#      failed_when: ('500 - Internal Server Error') in sat_subscribe.msg or ('404 - Not Found') in sat_subscribe.msg
-#      until: sat_subscribe is success or ('500 - Internal Server Error') not in sat_subscribe.msg or ('404 - Not Found') not in sat_subscribe.msg
-      delay: 10
-      retries: 10
-
-- name: Set up VM
-  hosts: "{{ vm_prefix }}*"
-  vars:
-    activation_keys:
-      S4_Image: SAP S4 Server
-      HANA_Image: SAP HANA Server
-
-  pre_tasks:
-    # this shouldn't be needed normally but auto-attach doesn't seem to always work
-    - name: attach susbscription
-      command: subscription-manager attach
-      failed_when: false
 
     - name: unset role and usage
       command: "{{ item }}"

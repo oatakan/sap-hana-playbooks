@@ -1,15 +1,14 @@
 ---
 
-- name: Subscription
+- name: Set up VM
   hosts: "{{ vm_prefix }}*"
-  serial: 1
   vars:
     activation_keys:
       S4_Image: SAP S4 Server
       HANA_Image: SAP HANA Server
 
-  tasks:
-    # this should be a temporary fix until template comes up with the correct hostname
+  pre_tasks:
+
     - block:
         - name: ensure hostname is set
           hostname:
@@ -25,15 +24,6 @@
         activationkey: "{{ activation_keys[foreman.hostgroup_name] | default('SAP HANA Server') }}"
         org_id: Shadow_Man
         auto_attach: true
-
-- name: Set up VM
-  hosts: "{{ vm_prefix }}*"
-  vars:
-    activation_keys:
-      S4_Image: SAP S4 Server
-      HANA_Image: SAP HANA Server
-
-  pre_tasks:
 
     - name: unset role and usage
       command: "{{ item }}"
