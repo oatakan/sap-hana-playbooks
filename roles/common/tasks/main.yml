@@ -1,15 +1,5 @@
 ---
 
-# this should be a temporary fix until template comes up with the correct hostname
-- block:
-    - name: ensure hostname is set
-      hostname:
-        name: "{{ inventory_hostname_short }}"
-
-    - name: gather new facts and hostname
-      setup:
-  when: ansible_hostname not in inventory_hostname
-
 - name: build hosts file
   lineinfile:
     dest: /etc/hosts
