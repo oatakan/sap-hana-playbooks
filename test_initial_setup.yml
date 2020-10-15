@@ -42,6 +42,11 @@
       debug:
         msg: "{{ sat_sub_status }}"
 
+    - name: install Red Hat Insights client
+      package:
+        name: insights-client
+        state: latest
+
     - name: register the system to Red Hat Insights
       command: insights-client --register
 
