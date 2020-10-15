@@ -1,29 +1,29 @@
 ---
 
 - hosts: "{{ vm_prefix }}*"
-#  pre_tasks:
-#    - name: unregister from satellite
-#      redhat_subscription:
-#        state: absent
-#
-#    - name: subscription-manager unregister
-#      command: subscription-manager unregister
-#      failed_when: false
-#
-#    - name: subscription-manager clean
-#      command: subscription-manager clean
-#      failed_when: false
-#
-#    - pause:
-#        seconds: 5
-#
-#    - name: Subscribe to our Satellite using our activation key
-#      redhat_subscription:
-#        state: present
-#        activationkey: "SAP S4 Server"
-#        org_id: Shadow_Man
-#        auto_attach: true
-#      failed_when: false
+  pre_tasks:
+    - name: unregister from satellite
+      redhat_subscription:
+        state: absent
+
+    - name: subscription-manager unregister
+      command: subscription-manager unregister
+      failed_when: false
+
+    - name: subscription-manager clean
+      command: subscription-manager clean
+      failed_when: false
+
+    - pause:
+        seconds: 5
+
+    - name: Subscribe to our Satellite using our activation key
+      redhat_subscription:
+        state: present
+        activationkey: "SAP S4 Server"
+        org_id: Shadow_Man
+        auto_attach: true
+      failed_when: false
   roles:
     - redhat_sap.sap_rhsm
     - redhat_sap.sap_hostagent
@@ -34,28 +34,28 @@
     - debug:
         msg: "hsr_role/alias: {{ sap_hana_hsr_role }} / {{ sap_hana_hsr_alias }}"
 
-#    - name: unregister from satellite
-#      redhat_subscription:
-#        state: absent
-#
-#    - name: subscription-manager unregister
-#      command: subscription-manager unregister
-#      failed_when: false
-#
-#    - name: subscription-manager clean
-#      command: subscription-manager clean
-#      failed_when: false
-#
-#    - pause:
-#        seconds: 5
-#
-#    - name: Subscribe to our Satellite using our activation key
-#      redhat_subscription:
-#        state: present
-#        activationkey: "SAP S4 Server"
-#        org_id: Shadow_Man
-#        auto_attach: true
-#      failed_when: false
+    - name: unregister from satellite
+      redhat_subscription:
+        state: absent
+
+    - name: subscription-manager unregister
+      command: subscription-manager unregister
+      failed_when: false
+
+    - name: subscription-manager clean
+      command: subscription-manager clean
+      failed_when: false
+
+    - pause:
+        seconds: 5
+
+    - name: Subscribe to our Satellite using our activation key
+      redhat_subscription:
+        state: present
+        activationkey: "SAP S4 Server"
+        org_id: Shadow_Man
+        auto_attach: true
+      failed_when: false
   roles:
     - redhat_sap.sap_hana_deployment
     - redhat_sap.sap_hana_hsr
@@ -91,28 +91,28 @@
 
 - hosts: "{{ vm_prefix }}*:&*s4_image"
   pre_tasks:
-#    - name: unregister from satellite
-#      redhat_subscription:
-#        state: absent
-#
-#    - name: subscription-manager unregister
-#      command: subscription-manager unregister
-#      failed_when: false
-#
-#    - name: subscription-manager clean
-#      command: subscription-manager clean
-#      failed_when: false
-#
-#    - pause:
-#        seconds: 5
-#
-#    - name: Subscribe to our Satellite using our activation key
-#      redhat_subscription:
-#        state: present
-#        activationkey: "SAP S4 Server"
-#        org_id: Shadow_Man
-#        auto_attach: true
-#      failed_when: false
+    - name: unregister from satellite
+      redhat_subscription:
+        state: absent
+
+    - name: subscription-manager unregister
+      command: subscription-manager unregister
+      failed_when: false
+
+    - name: subscription-manager clean
+      command: subscription-manager clean
+      failed_when: false
+
+    - pause:
+        seconds: 5
+
+    - name: Subscribe to our Satellite using our activation key
+      redhat_subscription:
+        state: present
+        activationkey: "SAP S4 Server"
+        org_id: Shadow_Man
+        auto_attach: true
+      failed_when: false
 
     - name: add temporary vip to hosts file for primary db
       lineinfile:
@@ -131,28 +131,28 @@
         msg: "hsr_role/alias: {{ sap_hana_hsr_role }} / {{ sap_hana_hsr_alias }}"
 
     # This is only temporarily needed until registration issues are resolved
-#    - name: unregister from satellite
-#      redhat_subscription:
-#        state: absent
-#
-#    - name: subscription-manager unregister
-#      command: subscription-manager unregister
-#      failed_when: false
-#
-#    - name: subscription-manager clean
-#      command: subscription-manager clean
-#      failed_when: false
-#
-#    - pause:
-#        seconds: 5
-#
-#    - name: Subscribe to our Satellite using our activation key
-#      redhat_subscription:
-#        state: present
-#        activationkey: "SAP HANA Server"
-#        org_id: Shadow_Man
-#        auto_attach: true
-#      failed_when: false
+    - name: unregister from satellite
+      redhat_subscription:
+        state: absent
+
+    - name: subscription-manager unregister
+      command: subscription-manager unregister
+      failed_when: false
+
+    - name: subscription-manager clean
+      command: subscription-manager clean
+      failed_when: false
+
+    - pause:
+        seconds: 5
+
+    - name: Subscribe to our Satellite using our activation key
+      redhat_subscription:
+        state: present
+        activationkey: "SAP HANA Server"
+        org_id: Shadow_Man
+        auto_attach: true
+      failed_when: false
   roles:
     - redhat_sap.sap_hana_ha_pacemaker
 
