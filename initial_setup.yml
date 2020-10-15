@@ -42,5 +42,8 @@
       debug:
         msg: "{{ sat_sub_status }}"
 
+    - name: register the system to Red Hat Insights
+      command: insights-client --register
+
   roles:
     - common
