@@ -1,0 +1,83 @@
+- name: deploy vms via satellite
+  hosts: localhost
+  gather_facts: no
+#  collections:
+#    -  theforeman.foreman
+  vars:
+    vm_prefix: lab1vm
+    hostgroups:
+      hana:
+        name: HANA_Image
+        id: 16
+      s4:
+        name: S4_Image
+        id: 17
+
+  tasks:
+    - name: generate s4 node
+      set_fact:
+        nodes: "{{ [ {'name': vm_prefix + '%02d'|format(1), 'hostgroup_name': hostgroups['s4'].name, 'hostgroup_id': hostgroups['s4'].id} ] }}"
+
+#    - name: generate hana nodes
+#      set_fact:
+#        nodes: "{{ nodes|default([]) + [ {'name': vm_prefix + '%02d'|format(1+(item|int)), 'hostgroup_name': hostgroups['hana'].name, 'hostgroup_id': hostgroups['hana'].id} ] }}"
+#      loop: "{{ range(1, 2 + 1, 1)|list }}"
+
+    - debug:
+        msg: "{{ nodes }}"
+
+#    - name: create host via satellite
+#      host:
+#        server_url: "{{ lookup('env', 'FOREMAN_SERVER') }}"
+#        username: "{{ lookup('env', 'FOREMAN_USER') }}"
+#        password: "{{ lookup('env', 'FOREMAN_PASSWORD') }}"
+#        name: "{{ vm.name }}"
+#        hostgroup: "{{ vm.hostgroup_name }}"
+#        managed: true
+#        build: true
+#        provision_method: image
+#        location: Chattanooga
+#        organization: Shadow Man
+#        state: present
+#      loop: "{{ nodes }}"
+#      loop_control:
+#        loop_var: vm
+
+    - name: deploy vms
+      uri:
+        url: "{{ lookup('env', 'FOREMAN_SERVER') }}/api/v2/hosts"
+        user: "{{ lookup('env', 'FOREMAN_USER') }}"
+        password: "{{ lookup('env', 'FOREMAN_PASSWORD') }}"
+        validate_certs: false
+        force_basic_auth: true
+        timeout: 14400
+        method: POST
+        body_format: json
+        body:
+          host:
+            name: "{{ vm.name }}"
+            managed: "true"
+            build: "false"
+            hostgroup_id: "{{ vm.hostgroup_id }}"
+            image_id: "{{ image_id | default('10') }}"
+            operatingsystem_id: "{{ operatingsystem_id | default('2') }}"
+            provision_method: "{{ provision_method | default('image') }}"
+            location_id: "{{ location_id | default('2') }}"
+            organization_id: "{{ organization_id | default('1') }}"
+            ptable_id: "173"
+            model_id: "2"
+            compute_attributes:
+              start: '1'
+      register: deploy_status
+      until: ('Unable to set DNS entry' not in (deploy_status.json.error.erros.base[0] | default('')))
+      delay: 5
+      retries: 20
+      changed_when:
+        - deploy_status.status | int == 201
+      failed_when:
+        - deploy_status.status | int != 201
+        - deploy_status.json.error.full_messages is defined
+        - "'Name has already been taken' not in deploy_status.json.error.full_messages"
+      loop: "{{ nodes }}"
+      loop_control:
+        loop_var: vm
