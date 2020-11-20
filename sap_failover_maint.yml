@@ -85,15 +85,8 @@
     - role: oatakan.rhel_upgrade
       update_reboot_kernel: yes
       become: no
-      register: reboot_system
 
   post_tasks:
-    - name: we reboot anyway for this scenario
-      reboot:
-        reboot_timeout: "{{ reboot_timeout }}"
-      become: no
-      when: reboot_system is not changed
-
     - name: set primary hostname
       set_fact:
         hana_primary_hostname: "{{ hostvars[groups['hana_primary'][0]]['ansible_hostname'] }}"
