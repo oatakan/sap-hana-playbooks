@@ -17,6 +17,23 @@
             state: stopped
           loop: "{{ ansible_play_hosts }}"
 
+        - name: find snapshots
+          ovirt_snapshot_info:
+            vm: "{{ item }}"
+            description: "{{ snapshot_description }}"
+          register: find_snapshots
+          loop: "{{ ansible_play_hosts }}"
+
+        - debug:
+            msg: "{{ find_snapshots.results }}"
+
+        - name: remove existing snapshots
+          ovirt_snapshot:
+            vm_name: "{{ item.1.vm.name }}"
+            snapshot_id: "{{ item.1.id }}"
+            state: absent
+          loop: "{{ find_snapshots.results|subelements('ovirt_snapshots') }}"
+
         - name: create snapshots
           ovirt_snapshot:
             vm_name: "{{ item }}"
