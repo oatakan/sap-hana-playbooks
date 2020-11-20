@@ -10,6 +10,7 @@
         hdbnsutil -sr_state
       become: yes
       become_user: "{{ sap_hana_deployment_hana_sid | lower }}adm"
+      become_method: su
       register: find_hana_role
 
     - name: set mode and index
@@ -44,12 +45,14 @@
         chdir: /usr/sap/{{ sap_hana_deployment_hana_sid }}/HDB{{ sap_hana_deployment_hana_instance_number }}
       become: yes
       become_user: "{{ sap_hana_deployment_hana_sid | lower }}adm"
+      become_method: su
 
 
 - name: unregister secondary (primary)
   hosts: "{{ vm_prefix }}*:&*hana_image:&hana_primary"
   become: yes
   become_user: "{{ sap_hana_deployment_hana_sid | lower }}adm"
+  become_method: su
 
   tasks:
     - name: unregister site
@@ -108,6 +111,7 @@
         chdir: /usr/sap/{{ sap_hana_deployment_hana_sid }}/HDB{{ sap_hana_deployment_hana_instance_number }}
       become: yes
       become_user: "{{ sap_hana_deployment_hana_sid | lower }}adm"
+      become_method: su
 
     - name: HDB start
       shell: >
@@ -117,11 +121,13 @@
         chdir: /usr/sap/{{ sap_hana_deployment_hana_sid }}/HDB{{ sap_hana_deployment_hana_instance_number }}
       become: yes
       become_user: "{{ sap_hana_deployment_hana_sid | lower }}adm"
+      become_method: su
 
 - name: wait for system replication (primary)
   hosts: "{{ vm_prefix }}*:&*hana_image:&hana_primary"
   become: yes
   become_user: "{{ sap_hana_deployment_hana_sid | lower }}adm"
+  become_method: su
 
   tasks:
     - name: wait until system replication status is active
@@ -174,6 +180,7 @@
       delay: 30
       become: yes
       become_user: "{{ sap_hana_deployment_hana_sid | lower }}adm"
+      become_method: su
 
 #    - name: DB unsuspend
 #      file:
@@ -199,3 +206,4 @@
       failed_when: false
       become: yes
       become_user: "{{ sap_hana_deployment_hana_sid | lower }}adm"
+      become_method: su
