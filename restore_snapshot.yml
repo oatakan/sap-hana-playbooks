@@ -4,6 +4,7 @@
 
   vars:
     vm_prefix: lab1vm
+    snapshot_description: sap_installed
 
   tasks:
     - block:
@@ -14,7 +15,7 @@
         - name: find snapshots
           ovirt_snapshot_info:
             vm: "{{ vm_prefix + '%02d'|format(1+(item|int)) }}*"
-            description: sap_installed
+            description: "{{ snapshot_description }}"
           register: find_snapshots
           loop: "{{ range(0, 2 + 1, 1)|list }}"
 

@@ -1,0 +1,43 @@
+- hosts: "{{ vm_prefix }}*"
+  gather_facts: no
+
+  vars:
+    vm_prefix: lab1vm
+    snapshot_description: sap_installed
+
+  tasks:
+    - block:
+        - name: Obtain SSO token with using username/password credentials
+          ovirt_auth:
+            insecure: yes
+
+        - name: stop vms
+          ovirt_vm:
+            name: "{{ item }}"
+            state: stopped
+          loop: "{{ ansible_play_hosts }}"
+
+        - name: create snapshots
+          ovirt_snapshot:
+            vm_name: "{{ item }}"
+            description: "{{ snapshot_description }}"
+            use_memory: false
+            state: present
+          loop: "{{ ansible_play_hosts }}"
+
+        - name: start vms
+          ovirt_vm:
+            name: "{{ item }}"
+            state: running
+          loop: "{{ ansible_play_hosts }}"
+
+      always:
+        - name: revoke the SSO token
+          ovirt_auth:
+            insecure: yes
+            ovirt_auth: "{{ ovirt_auth }}"
+            state: absent
+
+      run_once: yes
+      delegate_to: localhost
+      connection: local
