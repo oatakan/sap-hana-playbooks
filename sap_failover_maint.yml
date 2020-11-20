@@ -133,7 +133,8 @@
     - name: wait until system replication status is active
       shell: >
         source /usr/sap/{{ sap_hana_deployment_hana_sid }}/home/.sapenv.sh &&
-        python systemReplicationStatus.py | grep '^overall system replication' | cut -d':' -f2 | awk '{$1=$1};1'
+        python /usr/sap/{{ sap_hana_deployment_hana_sid }}/HDB{{ sap_hana_deployment_hana_instance_number }}/exe/python_support/systemReplicationStatus.py
+        | grep '^overall system replication' | cut -d':' -f2 | awk '{$1=$1};1'
       args:
         chdir: /usr/sap/{{ sap_hana_deployment_hana_sid }}/HDB{{ sap_hana_deployment_hana_instance_number }}/exe/python_support
       register: wait_sys_replication
@@ -198,7 +199,8 @@
     - name: wait until system replication status is active
       shell: >
         source /usr/sap/{{ sap_hana_deployment_hana_sid }}/home/.sapenv.sh &&
-        python systemReplicationStatus.py | grep '^overall system replication' | cut -d':' -f2 | awk '{$1=$1};1'
+        python /usr/sap/{{ sap_hana_deployment_hana_sid }}/HDB{{ sap_hana_deployment_hana_instance_number }}/exe/python_support/systemReplicationStatus.py
+        | grep '^overall system replication' | cut -d':' -f2 | awk '{$1=$1};1'
       args:
         chdir: /usr/sap/{{ sap_hana_deployment_hana_sid }}/HDB{{ sap_hana_deployment_hana_instance_number }}/exe/python_support
       register: wait_sys_replication
