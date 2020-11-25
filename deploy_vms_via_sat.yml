@@ -64,8 +64,8 @@
             provision_method: "{{ provision_method | default('image') }}"
             location_id: "{{ location_id | default('2') }}"
             organization_id: "{{ organization_id | default('1') }}"
-#            ptable_id: "173"
-#            model_id: "2"
+            ptable_id: "173"
+            model_id: "2"
             compute_attributes:
               start: '1'
       register: deploy_status
