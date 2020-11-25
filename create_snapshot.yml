@@ -17,7 +17,7 @@
             state: stopped
           loop: "{{ ansible_play_hosts }}"
 
-        - name: find snapshots
+        - name: find existing snapshots
           ovirt_snapshot_info:
             vm: "{{ item }}"
             description: "{{ snapshot_description }}"

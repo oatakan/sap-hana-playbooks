@@ -59,7 +59,7 @@
             managed: "true"
             build: "false"
             hostgroup_id: "{{ vm.hostgroup_id }}"
-            image_id: "{{ image_id | default('10') }}"
+            image_id: "{{ image_id | default('15') }}"
             operatingsystem_id: "{{ operatingsystem_id | default('2') }}"
             provision_method: "{{ provision_method | default('image') }}"
             location_id: "{{ location_id | default('2') }}"
