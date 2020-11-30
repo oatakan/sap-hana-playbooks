@@ -116,7 +116,7 @@
 
   post_tasks:
     - name: reboot system anyway
-      win_reboot:
+      reboot:
 
     - name: set primary hostname
       set_fact:
@@ -314,7 +314,7 @@
 
   post_tasks:
     - name: reboot system anyway
-      win_reboot:
+      reboot:
 
     - name: set primary hostname
       set_fact:

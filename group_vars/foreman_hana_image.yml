@@ -30,6 +30,8 @@ sap_hana_ha_pacemaker_node2_fqdn: "{{ hostvars[ansible_play_hosts[1]].ansible_fq
 sap_hana_ha_pacemaker_node1_ip: "{{ hostvars[ansible_play_hosts[0]].ansible_host | default(hostvars[ansible_play_hosts[0]].ansible_ssh_host) }}"
 sap_hana_ha_pacemaker_node2_ip: "{{ hostvars[ansible_play_hosts[1]].ansible_host | default(hostvars[ansible_play_hosts[1]].ansible_ssh_host) }}"
 
+sap_hana_ha_pacemaker_use_e4s: false
+
 sap_hana_hsr_roles:
   - primary
   - secondary
