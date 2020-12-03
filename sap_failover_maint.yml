@@ -10,6 +10,7 @@
         hdbnsutil -sr_state
       become: yes
       become_user: "{{ sap_hana_deployment_hana_sid | lower }}adm"
+      become_method: su
       register: find_hana_role
 
     - name: set mode and index
@@ -31,26 +32,26 @@
       loop: "{{ ansible_play_hosts }}"
 
 
-#- name: replication status (primary)
-#  hosts: "{{ vm_prefix }}*:&*hana_image:&hana_primary"
-#  gather_facts: no
-#  become: yes
-#  become_user: "{{ sap_hana_deployment_hana_sid | lower }}adm"
-#  become_method: su
-#  tasks:
-#    - name: ensure replication status is ACTIVE
-#      shell: >
-#        source /usr/sap/{{ sap_hana_deployment_hana_sid }}/home/.sapenv.sh &&
-#        python /usr/sap/{{ sap_hana_deployment_hana_sid }}/HDB{{ sap_hana_deployment_hana_instance_number }}/exe/python_support/systemReplicationStatus.py
-#        | grep '^overall system replication' | cut -d':' -f2 | awk '{$1=$1};1'
-#      args:
-#        chdir: /usr/sap/{{ sap_hana_deployment_hana_sid }}/HDB{{ sap_hana_deployment_hana_instance_number }}
-#      register: replication_status
-#
-#    - name: fail when replication status is not ACTIVE
-#      fail:
-#        msg: "replication status is not ACTIVE"
-#      when: (replication_status.stdout != 'ACTIVE')
+- name: check replication status (primary)
+  hosts: "{{ vm_prefix }}*:&*hana_image:&hana_primary"
+  gather_facts: no
+  become: yes
+  become_user: "{{ sap_hana_deployment_hana_sid | lower }}adm"
+  become_method: su
+  tasks:
+    - name: ensure replication status is ACTIVE
+      shell: >
+        source /usr/sap/{{ sap_hana_deployment_hana_sid }}/home/.sapenv.sh &&
+        python /usr/sap/{{ sap_hana_deployment_hana_sid }}/HDB{{ sap_hana_deployment_hana_instance_number }}/exe/python_support/systemReplicationStatus.py
+        | grep '^overall system replication' | cut -d':' -f2 | awk '{$1=$1};1'
+      args:
+        chdir: /usr/sap/{{ sap_hana_deployment_hana_sid }}/HDB{{ sap_hana_deployment_hana_instance_number }}
+      register: replication_status
+
+    - name: fail when replication status is not ACTIVE
+      fail:
+        msg: "replication status is not ACTIVE"
+      when: (replication_status.stdout != 'ACTIVE')
 
 - name: set to maintenance mode (secondary)
   hosts: "{{ vm_prefix }}*:&*hana_image:&hana_secondary"
@@ -67,6 +68,7 @@
         chdir: /usr/sap/{{ sap_hana_deployment_hana_sid }}/HDB{{ sap_hana_deployment_hana_instance_number }}
       become: yes
       become_user: "{{ sap_hana_deployment_hana_sid | lower }}adm"
+      become_method: su
 
 
 - name: unregister secondary (secondary)
@@ -106,6 +108,7 @@
         - hdb_start.rc > 0
         - ('process hdbdaemon HDB Daemon not running' not in hdb_start.stdout)
 
+
 - name: upgrade (secondary)
   hosts: "{{ vm_prefix }}*:&*hana_image:&hana_secondary"
 
@@ -115,9 +118,6 @@
       become: no
 
   post_tasks:
-    - name: reboot system anyway
-      reboot:
-
     - name: set primary hostname
       set_fact:
         hana_primary_hostname: "{{ hostvars[groups['hana_primary'][0]]['ansible_hostname'] }}"
@@ -137,6 +137,7 @@
       register: reregister_site
       become: yes
       become_user: "{{ sap_hana_deployment_hana_sid | lower }}adm"
+      become_method: su
       ignore_errors: yes
 
     - name: re-register site after upgrade online mode
@@ -152,7 +153,11 @@
       when: ('system must be shut down' in reregister_site.stdout)
       become: yes
       become_user: "{{ sap_hana_deployment_hana_sid | lower }}adm"
+      become_method: su
       ignore_errors: yes
+
+    - name: reboot system
+      reboot:
 
     - name: HDB start
       shell: >
@@ -162,13 +167,12 @@
         chdir: /usr/sap/{{ sap_hana_deployment_hana_sid }}/HDB{{ sap_hana_deployment_hana_instance_number }}
       become: yes
       become_user: "{{ sap_hana_deployment_hana_sid | lower }}adm"
+      become_method: su
       ignore_errors: yes
 
 
 - name: wait for system replication (primary)
   hosts: "{{ vm_prefix }}*:&*hana_image:&hana_primary"
-  become: yes
-  become_user: "{{ sap_hana_deployment_hana_sid | lower }}adm"
 
   tasks:
     - name: wait until system replication status is active
@@ -179,6 +183,9 @@
       args:
         chdir: /usr/sap/{{ sap_hana_deployment_hana_sid }}/HDB{{ sap_hana_deployment_hana_instance_number }}/exe/python_support
       register: wait_sys_replication
+      become: yes
+      become_user: "{{ sap_hana_deployment_hana_sid | lower }}adm"
+      become_method: su
       until: wait_sys_replication.stdout == 'ACTIVE'
       retries: 300
       delay: 10
@@ -186,9 +193,10 @@
 
 
 #- name: Suspend DB
-#  hosts: "{{ vm_prefix }}*:&tag_role_s4app"
+#  hosts: "{{ vm_prefix }}*:&*s4_image"
 #  become: yes
 #  become_user: "{{ sap_hana_deployment_hana_sid | lower }}adm"
+#  become_method: su
 #  tasks:
 #    - name: DB suspension
 #      file:
@@ -201,29 +209,22 @@
 #        line: "disconnected from HDB"
 
 
-- name: fail over
+- name: fail over (secondary)
   hosts: "{{ vm_prefix }}*:&*hana_image:&hana_secondary"
 
   tasks:
-#    - name: update vip
-#      command: pcs resource update vip_{{ sap_hana_deployment_hana_sid }}_{{ sap_hana_deployment_hana_instance_number }} IPaddr2 ip="{{ ansible_default_ipv4.address }}"
-
     - name: set maintenance off
       command: pcs property set maintenance-mode=false
 
+    - pause:
+        seconds: 30
+
     - name: fail over to secondary
-      shell: >
+      command: >
         crm_resource --move
-        --resource SAPHana_{{ sap_hana_deployment_hana_sid }}_{{ sap_hana_deployment_hana_instance_number }}-clone
-      args:
-        chdir: /usr/sap/{{ sap_hana_deployment_hana_sid }}/HDB{{ sap_hana_deployment_hana_instance_number }}
+        --resource SAPHana_{{ sap_hana_deployment_hana_sid }}_{{ sap_hana_deployment_hana_instance_number }}-clone -H {{ ansible_fqdn }}
 
-#    - name: re-add vip
-#      shell: >
-#        pcs resource create vip_{{ sap_hana_deployment_hana_sid }}_{{ sap_hana_deployment_hana_instance_number }}
-#        IPaddr2 ip="{{ ansible_default_ipv4.address }}"
-
-    - name: wait for status
+    - name: wait for status to be primary
       shell: >
         source /usr/sap/{{ sap_hana_deployment_hana_sid }}/home/.sapenv.sh &&
         hdbnsutil -sr_state | grep 'operation mode{{":"}} primary'
@@ -231,36 +232,43 @@
         chdir: /usr/sap/{{ sap_hana_deployment_hana_sid }}/HDB{{ sap_hana_deployment_hana_instance_number }}
       register: wait_for_status
       until: wait_for_status is success
-      retries: 10
+      retries: 30
       delay: 30
       become: yes
       become_user: "{{ sap_hana_deployment_hana_sid | lower }}adm"
+      become_method: su
 
-#    - name: DB unsuspend
-#      file:
-#        path: /usr/sap/RHE/SYS/global/hdb_quiesce.dat
-#        state: absent
-#      delegate_to: "{{ groups['tag_role_s4app'][0] }}"
+    - name: wait for clone set
+      shell: pcs status | grep "FAILED Master {{ ansible_fqdn }}"
+      register: wait_for_clone_set
+      until: wait_for_clone_set is success
+      ignore_errors: yes
+      retries: 30
+      delay: 3
+
+    - pause:
+        seconds: 30
 
     - name: pcs restore
-      shell: >
+      command: >
         pcs resource clear
         SAPHana_{{ sap_hana_deployment_hana_sid }}_{{ sap_hana_deployment_hana_instance_number }}-clone
 
-#    - name: wait until system replication status is active
-#      shell: >
-#        source /usr/sap/{{ sap_hana_deployment_hana_sid }}/home/.sapenv.sh &&
-#        python /usr/sap/{{ sap_hana_deployment_hana_sid }}/HDB{{ sap_hana_deployment_hana_instance_number }}/exe/python_support/systemReplicationStatus.py
-#        | grep '^overall system replication' | cut -d':' -f2 | awk '{$1=$1};1'
-#      args:
-#        chdir: /usr/sap/{{ sap_hana_deployment_hana_sid }}/HDB{{ sap_hana_deployment_hana_instance_number }}/exe/python_support
-#      register: wait_sys_replication
-#      until: wait_sys_replication.stdout == 'ACTIVE'
-#      retries: 300
-#      delay: 10
-#      failed_when: false
-#      become: yes
-#      become_user: "{{ sap_hana_deployment_hana_sid | lower }}adm"
+    - name: wait until system replication status is active
+      shell: >
+        source /usr/sap/{{ sap_hana_deployment_hana_sid }}/home/.sapenv.sh &&
+        python /usr/sap/{{ sap_hana_deployment_hana_sid }}/HDB{{ sap_hana_deployment_hana_instance_number }}/exe/python_support/systemReplicationStatus.py
+        | grep '^overall system replication' | cut -d':' -f2 | awk '{$1=$1};1'
+      args:
+        chdir: /usr/sap/{{ sap_hana_deployment_hana_sid }}/HDB{{ sap_hana_deployment_hana_instance_number }}/exe/python_support
+      register: wait_sys_replication
+      until: wait_sys_replication.stdout == 'ACTIVE'
+      retries: 300
+      delay: 10
+      failed_when: false
+      become: yes
+      become_user: "{{ sap_hana_deployment_hana_sid | lower }}adm"
+      become_method: su
 
 - name: upgrade (primary)
   hosts: "{{ vm_prefix }}*:&*hana_image:&hana_primary"
@@ -276,6 +284,7 @@
         chdir: /usr/sap/{{ sap_hana_deployment_hana_sid }}/HDB{{ sap_hana_deployment_hana_instance_number }}
       become: yes
       become_user: "{{ sap_hana_deployment_hana_sid | lower }}adm"
+      become_method: su
 
     - name: unregister site
       shell: >
@@ -283,6 +292,9 @@
         hdbnsutil -sr_unregister --id={{ sap_hana_site_id }}
       args:
         chdir: /usr/sap/{{ sap_hana_deployment_hana_sid }}/HDB{{ sap_hana_deployment_hana_instance_number }}
+      become: yes
+      become_user: "{{ sap_hana_deployment_hana_sid | lower }}adm"
+      become_method: su
       register: unregister_site
       when: sap_hana_site_id != ''
       failed_when:
@@ -299,6 +311,9 @@
         HDB start
       args:
         chdir: /usr/sap/{{ sap_hana_deployment_hana_sid }}/HDB{{ sap_hana_deployment_hana_instance_number }}
+      become: yes
+      become_user: "{{ sap_hana_deployment_hana_sid | lower }}adm"
+      become_method: su
       register: hdb_start
       when:
         - sap_hana_site_id != ''
@@ -313,9 +328,6 @@
       become: no
 
   post_tasks:
-    - name: reboot system anyway
-      reboot:
-
     - name: set primary hostname
       set_fact:
         hana_primary_hostname: "{{ hostvars[groups['hana_secondary'][0]]['ansible_hostname'] }}"
@@ -335,6 +347,7 @@
       register: reregister_site
       become: yes
       become_user: "{{ sap_hana_deployment_hana_sid | lower }}adm"
+      become_method: su
       ignore_errors: yes
 
     - name: re-register site after upgrade online
@@ -350,6 +363,10 @@
       when: ('system must be shut down' in reregister_site.stdout)
       become: yes
       become_user: "{{ sap_hana_deployment_hana_sid | lower }}adm"
+      become_method: su
+
+    - name: reboot system
+      reboot:
 
     - name: HDB start
       shell: >
@@ -359,11 +376,13 @@
         chdir: /usr/sap/{{ sap_hana_deployment_hana_sid }}/HDB{{ sap_hana_deployment_hana_instance_number }}
       become: yes
       become_user: "{{ sap_hana_deployment_hana_sid | lower }}adm"
+      become_method: su
 
 - name: wait for system replication (secondary)
   hosts: "{{ vm_prefix }}*:&*hana_image:&hana_secondary"
   become: yes
   become_user: "{{ sap_hana_deployment_hana_sid | lower }}adm"
+  become_method: su
 
   tasks:
     - name: wait until system replication status is active
