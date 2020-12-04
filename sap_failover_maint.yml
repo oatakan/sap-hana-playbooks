@@ -223,6 +223,10 @@
       command: >
         crm_resource --move
         --resource SAPHana_{{ sap_hana_deployment_hana_sid }}_{{ sap_hana_deployment_hana_instance_number }}-clone -H {{ ansible_fqdn }}
+      register: fail_over
+      failed_when:
+        - fail_over.rc > 0
+        - ('Situation already as requested' not in fail_over.stderr)
 
     - name: wait for status to be primary
       shell: >
