@@ -27,7 +27,7 @@
       when: sap_db_host is defined
 
   roles:
-    - redhat_sap.sap_rhsm
+#    - redhat_sap.sap_rhsm # replace with rhn register step/role
     - redhat_sap.sap_hostagent
     - sap_s4hana_deployment
 
